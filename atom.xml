@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
+  <title>努力吧少年！</title>
   
-  
+  <subtitle>What hurts more, the pain of hard work or the pain of regret?</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="https://fafe.me/"/>
+  <link href="http://fafe.me/"/>
   <updated>2017-01-20T16:21:36.000Z</updated>
-  <id>https://fafe.me/</id>
+  <id>http://fafe.me/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>johnj</name>
     
   </author>
   
@@ -18,8 +18,8 @@
   
   <entry>
     <title>Composer 初试</title>
-    <link href="https://fafe.me/2017/01/21/php-composer/"/>
-    <id>https://fafe.me/2017/01/21/php-composer/</id>
+    <link href="http://fafe.me/2017/01/21/php-composer/"/>
+    <id>http://fafe.me/2017/01/21/php-composer/</id>
     <published>2017-01-20T16:15:22.000Z</published>
     <updated>2017-01-20T16:21:36.000Z</updated>
     
@@ -37,19 +37,19 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="PHP" scheme="https://fafe.me/tags/PHP/"/>
+      <category term="PHP" scheme="http://fafe.me/tags/PHP/"/>
     
-      <category term="Composer" scheme="https://fafe.me/tags/Composer/"/>
+      <category term="Composer" scheme="http://fafe.me/tags/Composer/"/>
     
   </entry>
   
   <entry>
     <title>PHP 使用 xdebug 调试之路</title>
-    <link href="https://fafe.me/2017/01/21/php-xdebug/"/>
-    <id>https://fafe.me/2017/01/21/php-xdebug/</id>
+    <link href="http://fafe.me/2017/01/21/php-xdebug/"/>
+    <id>http://fafe.me/2017/01/21/php-xdebug/</id>
     <published>2017-01-20T16:15:18.000Z</published>
     <updated>2017-01-20T16:22:16.000Z</updated>
     
@@ -66,19 +66,19 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="PHP" scheme="https://fafe.me/tags/PHP/"/>
+      <category term="PHP" scheme="http://fafe.me/tags/PHP/"/>
     
-      <category term="xdebug" scheme="https://fafe.me/tags/xdebug/"/>
+      <category term="xdebug" scheme="http://fafe.me/tags/xdebug/"/>
     
   </entry>
   
   <entry>
     <title>Python 图片处理库: Pillow</title>
-    <link href="https://fafe.me/2017/01/21/python-pillow/"/>
-    <id>https://fafe.me/2017/01/21/python-pillow/</id>
+    <link href="http://fafe.me/2017/01/21/python-pillow/"/>
+    <id>http://fafe.me/2017/01/21/python-pillow/</id>
     <published>2017-01-20T16:15:07.000Z</published>
     <updated>2017-01-20T16:22:58.000Z</updated>
     
@@ -97,19 +97,19 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="Python" scheme="https://fafe.me/tags/Python/"/>
+      <category term="Python" scheme="http://fafe.me/tags/Python/"/>
     
-      <category term="Pillow" scheme="https://fafe.me/tags/Pillow/"/>
+      <category term="Pillow" scheme="http://fafe.me/tags/Pillow/"/>
     
   </entry>
   
   <entry>
     <title>跨域相关</title>
-    <link href="https://fafe.me/2017/01/20/cross-domain/"/>
-    <id>https://fafe.me/2017/01/20/cross-domain/</id>
+    <link href="http://fafe.me/2017/01/20/cross-domain/"/>
+    <id>http://fafe.me/2017/01/20/cross-domain/</id>
     <published>2017-01-20T15:55:43.000Z</published>
     <updated>2017-01-20T16:21:30.000Z</updated>
     
@@ -127,19 +127,19 @@
     
     </summary>
     
-      <category term="前端" scheme="https://fafe.me/categories/%E5%89%8D%E7%AB%AF/"/>
+      <category term="前端" scheme="http://fafe.me/categories/%E5%89%8D%E7%AB%AF/"/>
     
     
-      <category term="同源策略" scheme="https://fafe.me/tags/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/"/>
+      <category term="同源策略" scheme="http://fafe.me/tags/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/"/>
     
-      <category term="跨域" scheme="https://fafe.me/tags/%E8%B7%A8%E5%9F%9F/"/>
+      <category term="跨域" scheme="http://fafe.me/tags/%E8%B7%A8%E5%9F%9F/"/>
     
   </entry>
   
   <entry>
     <title>TensorFlow 初试</title>
-    <link href="https://fafe.me/2017/01/19/tensorflow/"/>
-    <id>https://fafe.me/2017/01/19/tensorflow/</id>
+    <link href="http://fafe.me/2017/01/19/tensorflow/"/>
+    <id>http://fafe.me/2017/01/19/tensorflow/</id>
     <published>2017-01-19T15:55:43.000Z</published>
     <updated>2017-01-20T16:21:20.000Z</updated>
     
@@ -157,17 +157,17 @@
     
     </summary>
     
-      <category term="机器学习" scheme="https://fafe.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
+      <category term="机器学习" scheme="http://fafe.me/categories/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/"/>
     
     
-      <category term="TensorFlow" scheme="https://fafe.me/tags/TensorFlow/"/>
+      <category term="TensorFlow" scheme="http://fafe.me/tags/TensorFlow/"/>
     
   </entry>
   
   <entry>
     <title>127.0.1.1是什么？</title>
-    <link href="https://fafe.me/2017/01/19/127.0.0.1/"/>
-    <id>https://fafe.me/2017/01/19/127.0.0.1/</id>
+    <link href="http://fafe.me/2017/01/19/127.0.0.1/"/>
+    <id>http://fafe.me/2017/01/19/127.0.0.1/</id>
     <published>2017-01-19T10:55:43.000Z</published>
     <updated>2017-01-20T16:21:10.000Z</updated>
     
@@ -182,17 +182,17 @@
     
     </summary>
     
-      <category term="Misc" scheme="https://fafe.me/categories/Misc/"/>
+      <category term="Misc" scheme="http://fafe.me/categories/Misc/"/>
     
     
-      <category term="hostname" scheme="https://fafe.me/tags/hostname/"/>
+      <category term="hostname" scheme="http://fafe.me/tags/hostname/"/>
     
   </entry>
   
   <entry>
     <title>Apache 配置学习</title>
-    <link href="https://fafe.me/2017/01/18/apache-config/"/>
-    <id>https://fafe.me/2017/01/18/apache-config/</id>
+    <link href="http://fafe.me/2017/01/18/apache-config/"/>
+    <id>http://fafe.me/2017/01/18/apache-config/</id>
     <published>2017-01-18T15:55:43.000Z</published>
     <updated>2017-01-20T16:20:38.000Z</updated>
     
@@ -208,17 +208,17 @@
     
     </summary>
     
-      <category term="后端" scheme="https://fafe.me/categories/%E5%90%8E%E7%AB%AF/"/>
+      <category term="后端" scheme="http://fafe.me/categories/%E5%90%8E%E7%AB%AF/"/>
     
     
-      <category term="Apache" scheme="https://fafe.me/tags/Apache/"/>
+      <category term="Apache" scheme="http://fafe.me/tags/Apache/"/>
     
   </entry>
   
   <entry>
     <title>PHP 基础回顾</title>
-    <link href="https://fafe.me/2017/01/18/php-beginning/"/>
-    <id>https://fafe.me/2017/01/18/php-beginning/</id>
+    <link href="http://fafe.me/2017/01/18/php-beginning/"/>
+    <id>http://fafe.me/2017/01/18/php-beginning/</id>
     <published>2017-01-18T13:00:43.000Z</published>
     <updated>2017-01-20T16:20:56.000Z</updated>
     
@@ -233,17 +233,17 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="PHP" scheme="https://fafe.me/tags/PHP/"/>
+      <category term="PHP" scheme="http://fafe.me/tags/PHP/"/>
     
   </entry>
   
   <entry>
     <title>Posix Thread 基础</title>
-    <link href="https://fafe.me/2017/01/01/posix-thread/"/>
-    <id>https://fafe.me/2017/01/01/posix-thread/</id>
+    <link href="http://fafe.me/2017/01/01/posix-thread/"/>
+    <id>http://fafe.me/2017/01/01/posix-thread/</id>
     <published>2016-12-31T16:14:03.000Z</published>
     <updated>2017-01-20T16:19:56.000Z</updated>
     
@@ -257,16 +257,16 @@
     </summary>
     
     
-      <category term="Linux" scheme="https://fafe.me/tags/Linux/"/>
+      <category term="Linux" scheme="http://fafe.me/tags/Linux/"/>
     
-      <category term="Thread" scheme="https://fafe.me/tags/Thread/"/>
+      <category term="Thread" scheme="http://fafe.me/tags/Thread/"/>
     
   </entry>
   
   <entry>
     <title>Python logging 基础</title>
-    <link href="https://fafe.me/2016/12/30/python-logging/"/>
-    <id>https://fafe.me/2016/12/30/python-logging/</id>
+    <link href="http://fafe.me/2016/12/30/python-logging/"/>
+    <id>http://fafe.me/2016/12/30/python-logging/</id>
     <published>2016-12-30T04:23:23.000Z</published>
     <updated>2017-01-20T16:19:40.000Z</updated>
     
@@ -279,19 +279,19 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="Python" scheme="https://fafe.me/tags/Python/"/>
+      <category term="Python" scheme="http://fafe.me/tags/Python/"/>
     
-      <category term="logging" scheme="https://fafe.me/tags/logging/"/>
+      <category term="logging" scheme="http://fafe.me/tags/logging/"/>
     
   </entry>
   
   <entry>
     <title>Python 协程基础</title>
-    <link href="https://fafe.me/2016/12/25/python-corroutine/"/>
-    <id>https://fafe.me/2016/12/25/python-corroutine/</id>
+    <link href="http://fafe.me/2016/12/25/python-corroutine/"/>
+    <id>http://fafe.me/2016/12/25/python-corroutine/</id>
     <published>2016-12-24T16:53:26.000Z</published>
     <updated>2017-01-20T16:19:22.000Z</updated>
     
@@ -304,19 +304,19 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="Python" scheme="https://fafe.me/tags/Python/"/>
+      <category term="Python" scheme="http://fafe.me/tags/Python/"/>
     
-      <category term="协程" scheme="https://fafe.me/tags/%E5%8D%8F%E7%A8%8B/"/>
+      <category term="协程" scheme="http://fafe.me/tags/%E5%8D%8F%E7%A8%8B/"/>
     
   </entry>
   
   <entry>
     <title>Jupyter Notebook 初试</title>
-    <link href="https://fafe.me/2016/12/18/jupyter-notebook/"/>
-    <id>https://fafe.me/2016/12/18/jupyter-notebook/</id>
+    <link href="http://fafe.me/2016/12/18/jupyter-notebook/"/>
+    <id>http://fafe.me/2016/12/18/jupyter-notebook/</id>
     <published>2016-12-17T18:39:56.000Z</published>
     <updated>2017-01-20T16:19:06.000Z</updated>
     
@@ -329,17 +329,17 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="Python" scheme="https://fafe.me/tags/Python/"/>
+      <category term="Python" scheme="http://fafe.me/tags/Python/"/>
     
   </entry>
   
   <entry>
     <title>Shell 基础</title>
-    <link href="https://fafe.me/2016/12/03/shell-basic/"/>
-    <id>https://fafe.me/2016/12/03/shell-basic/</id>
+    <link href="http://fafe.me/2016/12/03/shell-basic/"/>
+    <id>http://fafe.me/2016/12/03/shell-basic/</id>
     <published>2016-12-03T15:45:38.000Z</published>
     <updated>2017-01-20T16:18:44.000Z</updated>
     
@@ -354,17 +354,17 @@
     
     </summary>
     
-      <category term="Linux" scheme="https://fafe.me/categories/Linux/"/>
+      <category term="Linux" scheme="http://fafe.me/categories/Linux/"/>
     
     
-      <category term="shell" scheme="https://fafe.me/tags/shell/"/>
+      <category term="shell" scheme="http://fafe.me/tags/shell/"/>
     
   </entry>
   
   <entry>
     <title>Linux 中的 runlevel</title>
-    <link href="https://fafe.me/2016/12/02/linux-runlevel/"/>
-    <id>https://fafe.me/2016/12/02/linux-runlevel/</id>
+    <link href="http://fafe.me/2016/12/02/linux-runlevel/"/>
+    <id>http://fafe.me/2016/12/02/linux-runlevel/</id>
     <published>2016-12-01T20:27:13.000Z</published>
     <updated>2017-01-20T16:18:20.000Z</updated>
     
@@ -384,17 +384,17 @@
     
     </summary>
     
-      <category term="Linux" scheme="https://fafe.me/categories/Linux/"/>
+      <category term="Linux" scheme="http://fafe.me/categories/Linux/"/>
     
     
-      <category term="linux" scheme="https://fafe.me/tags/linux/"/>
+      <category term="linux" scheme="http://fafe.me/tags/linux/"/>
     
   </entry>
   
   <entry>
     <title>Python 中的时间模块</title>
-    <link href="https://fafe.me/2016/10/02/python-time-datetime/"/>
-    <id>https://fafe.me/2016/10/02/python-time-datetime/</id>
+    <link href="http://fafe.me/2016/10/02/python-time-datetime/"/>
+    <id>http://fafe.me/2016/10/02/python-time-datetime/</id>
     <published>2016-10-02T06:38:06.000Z</published>
     <updated>2017-01-20T16:17:18.000Z</updated>
     
@@ -406,19 +406,19 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="Python" scheme="https://fafe.me/tags/Python/"/>
+      <category term="Python" scheme="http://fafe.me/tags/Python/"/>
     
-      <category term="时间处理" scheme="https://fafe.me/tags/%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86/"/>
+      <category term="时间处理" scheme="http://fafe.me/tags/%E6%97%B6%E9%97%B4%E5%A4%84%E7%90%86/"/>
     
   </entry>
   
   <entry>
     <title>Arrow: better dates and times for Python</title>
-    <link href="https://fafe.me/2016/10/02/python-arrow/"/>
-    <id>https://fafe.me/2016/10/02/python-arrow/</id>
+    <link href="http://fafe.me/2016/10/02/python-arrow/"/>
+    <id>http://fafe.me/2016/10/02/python-arrow/</id>
     <published>2016-10-01T16:22:47.000Z</published>
     <updated>2017-01-20T16:17:04.000Z</updated>
     
@@ -430,21 +430,21 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="Python" scheme="https://fafe.me/tags/Python/"/>
+      <category term="Python" scheme="http://fafe.me/tags/Python/"/>
     
-      <category term="arrow" scheme="https://fafe.me/tags/arrow/"/>
+      <category term="arrow" scheme="http://fafe.me/tags/arrow/"/>
     
-      <category term="时间" scheme="https://fafe.me/tags/%E6%97%B6%E9%97%B4/"/>
+      <category term="时间" scheme="http://fafe.me/tags/%E6%97%B6%E9%97%B4/"/>
     
   </entry>
   
   <entry>
     <title>PlantUML: 用程序员的方式画图</title>
-    <link href="https://fafe.me/2016/10/01/hexo-plantuml/"/>
-    <id>https://fafe.me/2016/10/01/hexo-plantuml/</id>
+    <link href="http://fafe.me/2016/10/01/hexo-plantuml/"/>
+    <id>http://fafe.me/2016/10/01/hexo-plantuml/</id>
     <published>2016-10-01T05:31:03.000Z</published>
     <updated>2017-01-20T16:16:52.000Z</updated>
     
@@ -462,19 +462,19 @@
     
     </summary>
     
-      <category term="工具" scheme="https://fafe.me/categories/%E5%B7%A5%E5%85%B7/"/>
+      <category term="工具" scheme="http://fafe.me/categories/%E5%B7%A5%E5%85%B7/"/>
     
     
-      <category term="hexo" scheme="https://fafe.me/tags/hexo/"/>
+      <category term="hexo" scheme="http://fafe.me/tags/hexo/"/>
     
-      <category term="plantuml" scheme="https://fafe.me/tags/plantuml/"/>
+      <category term="plantuml" scheme="http://fafe.me/tags/plantuml/"/>
     
   </entry>
   
   <entry>
     <title>HTTP for Human: 深入研究 Requests</title>
-    <link href="https://fafe.me/2016/09/30/requests-http-for-human/"/>
-    <id>https://fafe.me/2016/09/30/requests-http-for-human/</id>
+    <link href="http://fafe.me/2016/09/30/requests-http-for-human/"/>
+    <id>http://fafe.me/2016/09/30/requests-http-for-human/</id>
     <published>2016-09-29T16:00:00.000Z</published>
     <updated>2017-01-20T16:16:46.000Z</updated>
     
@@ -488,19 +488,19 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="Python" scheme="https://fafe.me/tags/Python/"/>
+      <category term="Python" scheme="http://fafe.me/tags/Python/"/>
     
-      <category term="requests" scheme="https://fafe.me/tags/requests/"/>
+      <category term="requests" scheme="http://fafe.me/tags/requests/"/>
     
   </entry>
   
   <entry>
     <title>设计模式(三): 适配器模式</title>
-    <link href="https://fafe.me/2016/09/29/adapter-pattern/"/>
-    <id>https://fafe.me/2016/09/29/adapter-pattern/</id>
+    <link href="http://fafe.me/2016/09/29/adapter-pattern/"/>
+    <id>http://fafe.me/2016/09/29/adapter-pattern/</id>
     <published>2016-09-29T13:18:06.000Z</published>
     <updated>2017-01-20T16:16:10.000Z</updated>
     
@@ -514,21 +514,21 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="设计模式" scheme="https://fafe.me/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+      <category term="设计模式" scheme="http://fafe.me/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
-      <category term="java" scheme="https://fafe.me/tags/java/"/>
+      <category term="java" scheme="http://fafe.me/tags/java/"/>
     
-      <category term="适配器模式" scheme="https://fafe.me/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/"/>
+      <category term="适配器模式" scheme="http://fafe.me/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   
   <entry>
     <title>设计模式(一): 原型模式</title>
-    <link href="https://fafe.me/2016/09/29/prototype-pattern/"/>
-    <id>https://fafe.me/2016/09/29/prototype-pattern/</id>
+    <link href="http://fafe.me/2016/09/29/prototype-pattern/"/>
+    <id>http://fafe.me/2016/09/29/prototype-pattern/</id>
     <published>2016-09-29T03:19:46.000Z</published>
     <updated>2017-01-20T16:16:22.000Z</updated>
     
@@ -580,14 +580,14 @@
     
     </summary>
     
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
+      <category term="编程" scheme="http://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
     
     
-      <category term="设计模式" scheme="https://fafe.me/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
+      <category term="设计模式" scheme="http://fafe.me/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
     
-      <category term="java" scheme="https://fafe.me/tags/java/"/>
+      <category term="java" scheme="http://fafe.me/tags/java/"/>
     
-      <category term="原型模式" scheme="https://fafe.me/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"/>
+      <category term="原型模式" scheme="http://fafe.me/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   

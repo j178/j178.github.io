@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Arrow: better dates and times for Python | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Python 中时间处理的库太多, 基本的有time, 复杂的有datetime, 日历处理有Calendar, 各种时区信息的库… 各个库中函数的命名也十分让人崩溃,比如time中的ctime(), asctime(), strftime(), strptime(), localtime()你能记得住这些函数分别接受什么参数, 起什么作用吗? 我觉得挺崩溃的.">
+<meta name="keywords" content="Python,arrow,时间">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Arrow: better dates and times for Python">
+<meta property="og:url" content="https://fafe.me/2016/10/02/python-arrow/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="Python 中时间处理的库太多, 基本的有time, 复杂的有datetime, 日历处理有Calendar, 各种时区信息的库… 各个库中函数的命名也十分让人崩溃,比如time中的ctime(), asctime(), strftime(), strptime(), localtime()你能记得住这些函数分别接受什么参数, 起什么作用吗? 我觉得挺崩溃的.">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-01-20T16:17:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Arrow: better dates and times for Python">
+<meta name="twitter:description" content="Python 中时间处理的库太多, 基本的有time, 复杂的有datetime, 日历处理有Calendar, 各种时区信息的库… 各个库中函数的命名也十分让人崩溃,比如time中的ctime(), asctime(), strftime(), strptime(), localtime()你能记得住这些函数分别接受什么参数, 起什么作用吗? 我觉得挺崩溃的.">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="fafe.me">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-python-arrow" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/10/02/python-arrow/" class="article-date">
+  <time datetime="2016-10-01T16:22:47.000Z" itemprop="datePublished">2016-10-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Arrow: better dates and times for Python
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Python 中时间处理的库太多, 基本的有<code>time</code>, 复杂的有<code>datetime</code>, 日历处理有<code>Calendar</code>, 各种时区信息的库… 各个库中函数的命名也十分让人崩溃,比如<code>time</code>中的<code>ctime()</code>, <code>asctime()</code>, <code>strftime()</code>, <code>strptime()</code>, <code>localtime()</code>你能记得住这些函数分别接受什么参数, 起什么作用吗? 我觉得挺崩溃的. <a id="more"></a></p>
+<p>Arrow 是一个第三方时间日期处理库, 提供了非常简洁优雅的接口, 我们首先来分析一下这个库的功能模块.</p>
+<h4 id="api-py"><a href="#api-py" class="headerlink" title="api.py"></a>api.py</h4><p>向外提供了四个接口: <code>get()</code>, <code>now()</code>, <code>utcnow()</code>, <code>factory()</code>. 前三个都是代理到 <code>ArrowFactory</code> 相应的方法上, <code>factory()</code> 返回一个 <code>ArrowFactory</code> 实例.</p>
+<h4 id="facotry-py"><a href="#facotry-py" class="headerlink" title="facotry.py"></a>facotry.py</h4><p><code>ArrowFactory</code> 干的事很少, 还是那三个工厂方法 <code>get()</code>,<code>now()</code>, <code>utcnow()</code>, 都返回一个 <code>Arrow</code> 实例, 代表一个时间点.<br><code>get()</code>由<code>ArrowFactory</code>实现, 其他方法由<code>Arrow</code>实现.</p>
+<h4 id="arrow-py"><a href="#arrow-py" class="headerlink" title="arrow.py"></a>arrow.py</h4><p><code>Arrow</code> 实现了 <code>datetime</code> 接口, 是一个标准的 <code>datetime</code> 对象, 而且增加了许多功能.</p>
+<h5 id="1-构造函数"><a href="#1-构造函数" class="headerlink" title="1.构造函数:"></a>1.构造函数:</h5><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, year, month, day, hour=<span class="number">0</span>, minute=<span class="number">0</span>, second=<span class="number">0</span>, microsecond=<span class="number">0</span>, tzinfo=None)</span></span></div></pre></td></tr></table></figure>
+<p>如果<code>tzinfo == None</code>, 则默认为 UTC 时间.</p>
+<p><code>tzinfo</code> 参数接受四种形式:</p>
+<ul>
+<li>A <code>tzinfo</code> object.</li>
+<li>A <code>str</code> describing a timezone, similar to ‘US/Pacific’, or ‘Europe/Berlin’.</li>
+<li>A <code>str</code> in ISO-8601 style, as in ‘+07:00’.</li>
+<li>A <code>str</code>, one of the following:  ‘local’, ‘utc’, ‘UTC’.</li>
+</ul>
+<h5 id="2-Arrow-utcnow-与-Arrow-now-tzinfo-None"><a href="#2-Arrow-utcnow-与-Arrow-now-tzinfo-None" class="headerlink" title="2. Arrow.utcnow() 与 Arrow.now(tzinfo=None)"></a>2. Arrow.utcnow() 与 Arrow.now(tzinfo=None)</h5><p>这两个工厂方法比较简单. <code>utcnow()</code>调用<code>datatime.utcnow()</code>获取 UTC 时间, 然后构造<code>Arrow</code>对象.</p>
+<p><code>now()</code>接受一个<code>tzinfo</code>参数, 如果为空则默认为 <code>dateutil_tz.tzlocal()</code>, 即本地时间.</p>
+<h5 id="3-Arrow-get"><a href="#3-Arrow-get" class="headerlink" title="3. Arrow.get()"></a>3. Arrow.get()</h5><h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ul>
+<li><a href="http://crsmithdev.com/arrow/" target="_blank" rel="external">Arrow: better dates and times for Python</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2016/10/02/python-arrow/" data-id="cj7lhauwz000vp3qf33tai4vd" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/arrow/">arrow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/时间/">时间</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/10/02/python-time-datetime/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          Python 中的时间模块
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/10/01/hexo-plantuml/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">PlantUML: 用程序员的方式画图</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Misc/">Misc</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composer/">Composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pillow/">Pillow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/arrow/">arrow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hostname/">hostname</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logging/">logging</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/plantuml/">plantuml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xdebug/">xdebug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协程/">协程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原型模式/">原型模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/同源策略/">同源策略</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间/">时间</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间处理/">时间处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/跨域/">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/适配器模式/">适配器模式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/j178" target="_blank">Github</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+</div>
+</body>
+</html>

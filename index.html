@@ -1,0 +1,762 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="https://fafe.me/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:locale" content="zh-CN">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="fafe.me">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main">
+  
+    <article id="post-php-composer" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/21/php-composer/" class="article-date">
+  <time datetime="2017-01-20T16:15:22.000Z" itemprop="datePublished">2017-01-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/21/php-composer/">Composer 初试</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>Composer 不是一个包管理器，默认下它不会全局安装任何包，只是在一个项目的某个目录中进行安装，它只是一个<strong>依赖管理</strong>工具。</li>
+<li>Composer 解决的问题是：<ol>
+<li>你有一个项目依赖于若干个库</li>
+<li>其中一些库依赖于其他库</li>
+<li>你声明你依赖的东西</li>
+<li>Composer 会找出哪个版本的包需要安装，并安装他们（将他们下载到你的项目中）<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3></li>
+</ol>
+</li>
+</ul>
+<ol>
+<li><p>curl -sS  <a href="https://getcomposer.org/installer" target="_blank" rel="external">https://getcomposer.org/installer</a> | php </p>
+<p>installer是一个PHP脚本，用来下载真正的composer.phar，composer.phar会保存到当前目录中。可以使用 <code>--install-dir</code>指定保存目录。</p>
+</li>
+<li><p>将composer.phar移动到<code>PATH</code>中<br><code>mv composer.phar /usr/local/bin/composer</code><br>这样就可以直接使用<code>composer</code>命令</p>
+</li>
+</ol>
+<h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><ul>
+<li>composer help <command> 非常有用</li>
+<li><code>composer install</code> 读取当前目录下的<code>composer.lock</code>文件，下载和安装其中提到的库和依赖。如果<code>composer.lock</code>不存在，则查看<code>composer.json</code>文件。</li>
+<li><code>composer update</code> 读取当前目录中的<code>composer.json</code>文件，更新、删除或者安装所有的依赖。</li>
+<li><code>composer init</code></li>
+<li><code>composer require</code> xx 添加xx依赖到<code>composer.json</code>中，并安装他们</li>
+<li>修改composer 全局配置<code>composer config -g repo.packagist composer https://packagist.phpcomposer.com</code></li>
+</ul>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><p><a href="http://docs.phpcomposer.com/00-intro.html" target="_blank" rel="external">Composer中文文档</a></p>
+<p><a href="http://pkg.phpcomposer.com/" target="_blank" rel="external">Packagist/Composer中国全量镜像</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/21/php-composer/" data-id="cj7lhauxh0023p3qfjcoovb41" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Composer/">Composer</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-php-xdebug" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/21/php-xdebug/" class="article-date">
+  <time datetime="2017-01-20T16:15:18.000Z" itemprop="datePublished">2017-01-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/21/php-xdebug/">PHP 使用 xdebug 调试之路</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>PHPStorm中调试利用的是xdebug的remote特性，使用的是 <code>DBGp</code>协议，PHPStorm是一个实现了<code>DBGp</code>协议的客户端</li>
+<li>在<code>php.ini</code>中启用<code>xdebug.remote_enable</code>, 配置<code>xdebug.remote_host</code>和<code>xdebug.remote_port</code>, port默认是9000.<br>通过<code>phpinfo()</code>函数的输出，可以在<code>Loaded Configuration File</code>中看到实际加载的<code>php.ini</code>文件是哪一个。</li>
+<li><code>sudo apt install php-xdebug</code>之后，会自动在<code>/etc/php/7.0/apache2/conf.d</code>中创建一个<code>xdebug</code>的配置文件，可以在这个文件中修改关于xdebug的配置，而不用去改通用的<code>php.ini</code>.</li>
+<li>client启动之后会监听 port，等待xdebug发送的请求。</li>
+<li>要使php解释器在运行的时候activate xdebug，有三种方式：<ol>
+<li>从命令行运行php脚本时，设置环境变量<code>export XDEBUG_CONFIG=&quot;idekey=session_name&quot;</code>, 同样也可以在<code>XDEBUG_CONFIG</code>环境变量中设置<code>remote_host</code>,<code>remote_port</code>等属性。</li>
+<li>从一个浏览器中启动debugger，需要传递一个<code>XDEBUG_SESSION_START=session_name</code>参数，这个参数可以是<code>GET</code>，<code>POST</code>或者<code>Cookie</code>。可以使用一些浏览器的插件自动传递这个参数。</li>
+</ol>
+</li>
+<li>只要<code>xdebug.remtoe_enable</code>开启了，PHPStorm打开了 Listening for PHP Debug，也就是服务器和客户端都准备好了，然后浏览器发送请求的时候包含一个<code>XDEBUG_SESSION_START</code>参数（？文档中写的是XDEBUG_SESSION_START,而实际上<code>bookmark</code>和插件中设置的cookie都是<code>XDEBUG_SESSION</code>），就可以愉快地调试了。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/21/php-xdebug/" data-id="cj7lhauxk0025p3qfzbw4csa1" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xdebug/">xdebug</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-pillow" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/21/python-pillow/" class="article-date">
+  <time datetime="2017-01-20T16:15:07.000Z" itemprop="datePublished">2017-01-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/21/python-pillow/">Python 图片处理库: Pillow</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>Image.open()<br>im.mode, im.size, im.format</li>
+<li>Image.save()</li>
+<li>Image.show()<br>性能很慢, 仅作调试用.</li>
+<li>Image.convert()<br>比较常用的函数</li>
+<li>Image.crop()</li>
+<li>Image.paste()</li>
+<li>Image.split()<br>将图像分为不同的 band</li>
+<li>Image.getpixel()</li>
+<li>Image.putpixel()<br>很慢</li>
+<li>Image.point()<br>可以接受一个 lookup table, 或者一个函数, 函数接受一个参数, 这个参数可以看做像素点的颜色, 返回值为像素点的新颜色</li>
+<li>Image.thumbnail()<br>生成缩略图, 会直接修改原图, 如果要保留原图需要先用 <code>Image.copy()</code></li>
+<li>Image.getbbox()<br>这个函数好像很好用的样子, 待会儿再尝试</li>
+<li>Image.getcolors(maxcolors=256)<br>获取图片中用到的所有颜色, 返回 [ (count, color),… ]<br>如果是 RGB 等格式, color 也是一个 <code>tuple</code>, 所以不同的颜色会有很多, 需要传入较大的 maxcolors, 否则会返回 <code>None</code></li>
+<li>Image.histogram()<br>获取图片的直方图, 返回一个<code>list</code>, 如果是灰度图像, 则 list 大小为256, 每个元素表示0-255各个灰度的像素点的个数. 如果是 RGB 图像, 则 list 大小为 256*3.</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/21/python-pillow/" data-id="cj7lhauxm002ap3qfotuf7we7" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pillow/">Pillow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-cross-domain" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/20/cross-domain/" class="article-date">
+  <time datetime="2017-01-20T15:55:43.000Z" itemprop="datePublished">2017-01-20</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/20/cross-domain/">跨域相关</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="同源策略"><a href="#同源策略" class="headerlink" title="同源策略"></a>同源策略</h2><p>origin = 协议 + 域名 + 端口号</p>
+<p>同源策略的限制：</p>
+<ol>
+<li>Cookie, LocalStorage 和 IndexDB 无法读取</li>
+<li>DOM 无法获得</li>
+<li>AJAX 无法发送</li>
+</ol>
+<p>可跨域的标签 script，img，iframe, link等</p>
+<p>JSONP 实质是一种自己发起的XSS</p>
+<p>无法在 https 页面发起对非https的请求，会出现 Mixed content 错误</p>
+<h2 id="CORS方案"><a href="#CORS方案" class="headerlink" title="CORS方案"></a>CORS方案</h2><p>发起跨域请求时，浏览器会自动设置<code>Origin</code>首部，无法手动改变<br>在服务端的响应中设置<code>Access-Control-Allow-Origin</code>首部<br>但是这个首部不支持多个 host，所以如果需要支持多个 domain，需要动态地生成这个首部。比如说：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&lt; ?php</div><div class="line">$allowedOrigins = <span class="keyword">array</span>(<span class="string">"http://example.com"</span>, <span class="string">"http://localhost:63342"</span>);</div><div class="line">$headers = getallheaders();</div><div class="line"><span class="keyword">if</span> ($headers[<span class="string">"Origin"</span>] &amp;&amp; in_array($headers[<span class="string">"Origin"</span>], $allowedOrigins)) &#123;</div><div class="line">    header(<span class="string">"Access-Control-Allow-Origin: "</span> . $headers[<span class="string">"Origin"</span>]);</div><div class="line">&#125;</div><div class="line"><span class="meta">?&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="是否发送凭证"><a href="#是否发送凭证" class="headerlink" title="是否发送凭证"></a>是否发送凭证</h3><p>客户端：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> xhr = <span class="keyword">new</span> XMLHttpRequest();</div><div class="line">xhr.withCredentials = <span class="literal">true</span>;</div></pre></td></tr></table></figure>
+<p>服务端添加 <code>Access-Control-Allow-Credentials : true</code>首部，如果服务器端没有返回这个首部，即使当前domain是允许的，客户端也得不到响应。会有类似 <em>XMLHttpRequest cannot load <a href="http://example.com/index.php" target="_blank" rel="external">http://example.com/index.php</a>. Credentials flag is ‘true’, but the ‘Access-Control-Allow-Credentials’ header is ”. It must be ‘true’ to allow credentials. Origin ‘<a href="http://localhost:63342‘" target="_blank" rel="external">http://localhost:63342‘</a> is therefore not allowed access.</em> 的提示。</p>
+<p>当开启 withCredential 属性时，服务器返回的<code>Access-Control-Allow-Origin</code>不允许为<code>*</code></p>
+<h3 id="Preflight"><a href="#Preflight" class="headerlink" title="Preflight"></a>Preflight</h3><p>当跨域请求不是简单请求时，浏览器会先发送一个预检请求(preflight)</p>
+<p>浏览器先通过OPTIONS方法询问 request的方法和首部是否支持:</p>
+<p><code>Access-Control-Request-Method</code></p>
+<p><code>Access-Control-Request-Headers</code></p>
+<p>如果服务端允许跨域请求，则返回几个特殊的首部：</p>
+<p><code>Access-Control-Allow-Methods</code>:必需。返回所有支持的方法，而不单是浏览器请求的那个方法，这是为了避免多次预检请求。</p>
+<p><code>Access-Control-Allow-Headers</code>：如果请求中有<code>Access-Control-Request-Headers</code>，则必需。返回所有支持的首部信息。</p>
+<p><code>Access-Control-Allow-Credentials</code></p>
+<p><code>Access-Control-Allow-Max-Age</code>:可选，指定本次预检的有效期，单位为秒。</p>
+<p>一旦服务器通过了预检，以后每次浏览器正常的CORS请求都跟简单请求一样，包含一个<code>Origin</code>首部，服务器的相应也会有一个<code>Access-Control-Allow-Origin</code>。</p>
+<h3 id="crossorigin属性"><a href="#crossorigin属性" class="headerlink" title="crossorigin属性"></a><code>crossorigin</code>属性</h3><p>通常 <code>&lt;link&gt; &lt;script&gt; &lt;img&gt;</code>这些本身就可以跨域的标签，在请求时不会发送<code>Origin</code>首部，所以我们也无法使用 JS 获取他们的内容(会报错)。如果为这些标签设置<code>crossorigin</code>属性，则请求时就会使用<code>CORS</code>请求，并且设置了<code>Origin</code>首部。</p>
+<p><code>crossorigin</code>有两个可能的值：<code>anonymouse</code>：不会发送credentials，<code>use-credentials</code>：发送credentials</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><ol>
+<li><a href="http://www.ruanyifeng.com/blog/2016/04/same-origin-policy.html" target="_blank" rel="external">浏览器同源政策及其规避方法</a></li>
+<li><a href="http://www.ruanyifeng.com/blog/2016/04/cors.html" target="_blank" rel="external">跨域资源共享 CORS 详解</a></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/20/cross-domain/" data-id="cj7lhauxf001zp3qf9fo808uk" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/同源策略/">同源策略</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/跨域/">跨域</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-tensorflow" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/19/tensorflow/" class="article-date">
+  <time datetime="2017-01-19T15:55:43.000Z" itemprop="datePublished">2017-01-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/机器学习/">机器学习</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/19/tensorflow/">TensorFlow 初试</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><ol>
+<li><p><code>pip install tensorflow</code></p>
+</li>
+<li><p>如果安装GPU版本的，需要安装 Cuda Toolkit 8.0 和 cuDNN v5.1<br><code>pip install tensorflow-gpu</code><br>并且设置环境变量 <code>LD_LIBRARY_PATH</code>和<code>CUDA_HOME</code>。</p>
+</li>
+<li><p>运行 demo model</p>
+<p><code>python -m tensorflow.models.image.mnist.convolutional</code></p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/19/tensorflow/" data-id="cj7lhauxd001wp3qfsuf757a5" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorFlow/">TensorFlow</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-127.0.0.1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/19/127.0.0.1/" class="article-date">
+  <time datetime="2017-01-19T10:55:43.000Z" itemprop="datePublished">2017-01-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Misc/">Misc</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/19/127.0.0.1/">127.0.1.1是什么？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Some software (e.g., GNOME) expects the system hostname to be resolvable to an IP address with a canonical fully qualified domain name. This is really improper because system hostnames and domain names are two very different things; but there you have it. In order to support that software, it is necessary to ensure that the system hostname can be resolved. Most often this is done by putting a line in <code>/etc/hosts</code> containing some IP address and the system hostname. If your system has a permanent IP address then use that; otherwise use the address 127.0.1.1.</p>
+<p><code>/etc/hosts</code></p>
+<p><code>/etc/hostname</code></p>
+<p>The system hostname should always be resolvable even when the network is down. Basically, some applications still try to resolve a host via 127.0.1.1 so in order to accommodate, it is kept by default on current debian-type distributions.</p>
+<p>The general rule of thumb is: If you don’t have a permanent IP address for your host, use 127.0.1.1.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/19/127.0.0.1/" data-id="cj7lhauxb001sp3qfybt5ji6a" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hostname/">hostname</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-apache-config" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/18/apache-config/" class="article-date">
+  <time datetime="2017-01-18T15:55:43.000Z" itemprop="datePublished">2017-01-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/后端/">后端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/18/apache-config/">Apache 配置学习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h2><ul>
+<li>配置文件<code>/etc/apach2/apache2.conf</code>以及<code>/etc/apache2/conf-enabled</code></li>
+<li><code>DirectoryIndex index.html index.php</code> 优先级从左到右降低</li>
+<li>包含外部配置文件 <code>Include xxx</code></li>
+</ul>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p><code>apachectl</code>脚本，从<code>/etc/apache2/envavars</code>中读取并设置一些环境变量</p>
+<h2 id="Rewrite"><a href="#Rewrite" class="headerlink" title="Rewrite"></a>Rewrite</h2><p>基于正则表达式的规则，动态修改 incoming URl requests。</p>
+<h2 id="Virtual-Host"><a href="#Virtual-Host" class="headerlink" title="Virtual Host"></a>Virtual Host</h2><p>用同一个 Apache 服务器上搭建多个服务，根据用户请求中不同的 Host首部（或其他条件） 将请求转给不同的<code>VirtualHost</code>来处理。</p>
+<h3 id="Name-based-vs-IP-based-Virtual-Hosts"><a href="#Name-based-vs-IP-based-Virtual-Hosts" class="headerlink" title="Name-based vs IP-based Virtual Hosts"></a>Name-based vs IP-based Virtual Hosts</h3><p>基于IP的虚拟主机，要求服务器有多个IP，Apache根据用户请求的IP来转发到相应的主机中<br>基于名字的虚拟主机，要求客户端在HTTP首部中包含主机的名字，这样多个主机就可以共享同一个IP。<br>基于名字(hostname)的虚拟主机，通常只需要将多个域名解析到同一个IP即可。<br>比如说，login.a.com和logout.a.com只想相同的IP，也使用相同的端口（即后台的web服务器是同一个），但是后台的web服务器却可以根据请求中的Host首部不同，为他们提供不同的服务。</p>
+<h3 id="服务器如何选择合适的-name-based-virtual-host"><a href="#服务器如何选择合适的-name-based-virtual-host" class="headerlink" title="服务器如何选择合适的 name-based virtual host?"></a>服务器如何选择合适的 name-based virtual host?</h3><p>先进行 IP-based的选择，也就是先根据请求的IP选择出为此IP服务的Virtual Host，然后再从中找出最符合的name-based virtual host。</p>
+<p>先根据IP和端口选出一组最符合的hosts，然后根据<code>ServerName</code>和<code>ServerAlias</code>作比较。如果没有符合的ServerName和ServerAlias，则选择列出的第一个。</p>
+<p>省略ServerName则默认使用fully qualified domain name。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://httpd.apache.org/docs/2.4/vhosts/name-based.html" target="_blank" rel="external"></a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/18/apache-config/" data-id="cj7lhaux9001np3qfs1ir1nc2" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Apache/">Apache</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-php-beginning" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/18/php-beginning/" class="article-date">
+  <time datetime="2017-01-18T13:00:43.000Z" itemprop="datePublished">2017-01-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/18/php-beginning/">PHP 基础回顾</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="include-require"><a href="#include-require" class="headerlink" title="include/require"></a>include/require</h3><p>如果没有提供路径，则会查找<code>include_path</code>，如果没有找到，则会查找当前脚本所在目录和当前工作目录。如果均失败的话，include 会产生一个 warnning，require会产生一个 fatal error.</p>
+<p>当一个文件被 <code>included</code>时，被包含文件中的代码继承了<code>include</code>所在行的变量作用域。任何在<code>include</code>处可见的变量，对于被包含的代码也可见（相当于将被包含的代码复制并替换<code>include</code>命令。）但是，被包含文件中定义的函数和类都拥有全局作用域。</p>
+<p>在解析被包含的文件时，解析器会切换为 HTML模式，所以任何没有包含在 php tag中的文本都会当做HTML处理，也就是会被原样 echo 给客户端。</p>
+<p>include失败会返回FALSE，并产生一个warning。如果include成功，并且被包含文件中没有<code>return</code>语句，include会返回<code>1</code>。 如果被包含文件中有return语句，那么执行到return语句时，会停止对被包含文件的处理，并返回return提供的值，就像调用一个普通的函数一样。</p>
+<p>如果被包含文件中定义了函数，并且被包含了两次，则会造成 fatal error，因为函数已经被声明过了。最好使用 include_once。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ul>
+<li><code>sudo apt-add-repository ppa:ondrej/php5</code></li>
+<li><code>php-xxx</code>都是PHP的扩展包，比如<code>php-gd</code>，<code>php-mysql</code>，<code>php-xdebug</code>需要手动安装</li>
+<li>Apache 通过 <code>libapache2-mod-php7.1</code>模块与PHP互动，配置文件为<code>/etc/apache2/mod-enabled/php7.0/</code>中</li>
+<li><code>/usr/bin/php</code>也只是一个<code>alternative</code>，可以使用update-alternative改变当前<code>php</code>命令使用的版本</li>
+</ul>
+<p>安装过程中的处理：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div></pre></td><td class="code"><pre><div class="line">Setting up php7.1-common (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/calendar.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/ctype.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/exif.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/fileinfo.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/ftp.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/gettext.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/iconv.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/pdo.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/phar.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/posix.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/shmop.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sockets.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvmsg.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvsem.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvshm.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/tokenizer.ini with new version</div><div class="line">Setting up php7.1-json (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/json.ini with new version</div><div class="line">Setting up php7.1-opcache (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/opcache.ini with new version</div><div class="line">Setting up php7.1-readline (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/readline.ini with new version</div><div class="line">Setting up php7.1-cli (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line">update-alternatives: using /usr/bin/php7.1 to provide /usr/bin/php (php) <span class="keyword">in</span> auto mode</div><div class="line">update-alternatives: using /usr/bin/phar7.1 to provide /usr/bin/phar (phar) <span class="keyword">in</span> auto mode</div><div class="line">update-alternatives: using /usr/bin/phar.phar7.1 to provide /usr/bin/phar.phar (phar.phar) <span class="keyword">in</span> auto mode</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/cli/php.ini with new version</div><div class="line">Setting up libapache2-mod-php7.1 (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/apache2/php.ini with new version</div><div class="line">libapache2-mod-php7.1: php7.0 module already enabled, not enabling PHP 7.1</div><div class="line">Setting up libapache2-mod-php (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.0-common (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mcrypt (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mbstring (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-xml (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-readline (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-opcache (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mysql (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-json (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libwebp5:amd64 (0.4.4-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libgd3:amd64 (2.2.3-3+deb.sury.org~xenial+0) ...</div><div class="line">Setting up php7.0-gd (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-curl (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-cli (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Replacing config file /etc/php/7.0/cli/php.ini with new version</div><div class="line">Setting up libapache2-mod-php7.0 (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Installing new version of config file /etc/apache2/mods-available/php7.0.load ...</div><div class="line">libapache2-mod-php7.0: not switching MPM - already enabled</div><div class="line">Setting up php7.0 (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libjbig0:amd64 (2.1-3.1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libpcre16-3:amd64 (2:8.39-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libsodium18:amd64 (1.0.10-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libssl-doc (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libssl-dev:amd64 (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libwebpmux1:amd64 (0.4.4-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libzmq5:amd64 (4.2.0-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up openssl (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.1-curl (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/curl.ini with new version</div><div class="line">Setting up php-curl (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-gd (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/gd.ini with new version</div><div class="line">Setting up php-gd (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-xml (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/dom.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/simplexml.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/wddx.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xml.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xmlreader.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xmlwriter.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xsl.ini with new version</div><div class="line">Setting up php-xml (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php-pear (1:1.10.1+submodules+notgz-8+donate.sury.org~xenial+2) ...</div><div class="line">Setting up php-gettext (1.0.11-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.1-mbstring (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mbstring.ini with new version</div><div class="line">Setting up php-mbstring (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-mcrypt (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mcrypt.ini with new version</div><div class="line">Setting up php-mcrypt (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-mysql (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mysqlnd.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mysqli.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/pdo_mysql.ini with new version</div><div class="line">Setting up php-mysql (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php-xdebug (2.5.0-1+deb.sury.org~xenial+1) ...</div><div class="line">Processing triggers <span class="keyword">for</span> libc-bin (2.23-0ubuntu5) ...</div><div class="line">Processing triggers <span class="keyword">for</span> libapache2-mod-php7.1 (7.1.0-5+deb.sury.org~xenial+1) ...</div></pre></td></tr></table></figure>
+<ul>
+<li>问题，现在通过<code>a2enmod php7.1</code>启用了PHP7.1，那么对于PHP的请求，会交给PHP7.0呢？还是PHP7.1呢？ =》 默认的还是PHP7.0，需要自己手动 <code>a2dismod php7.0</code>才行</li>
+<li>php-pear是什么？</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/18/php-beginning/" data-id="cj7lhauxa001pp3qf3brjr18y" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-posix-thread" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/01/posix-thread/" class="article-date">
+  <time datetime="2016-12-31T16:14:03.000Z" itemprop="datePublished">2017-01-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/01/posix-thread/">Posix Thread 基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h3><p>一个线程包含在进程中表示一个 execution context 的必要信息，包括 <em>thread ID</em>, a set of register values, a stack, a scheduling priority and policy, a signal mask, an <code>errno</code> variable, and thread-specific data.</p>
+<p>进程中的所有东西都是线程间共享的，包括 text of the executable program, the programs’s global and heap memory, the stacks, and the file descriptors.
+        
+          <p class="article-more-link">
+            <a href="/2017/01/01/posix-thread/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/01/posix-thread/" data-id="cj7lhaux8001kp3qfo2twbbl7" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Thread/">Thread</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-logging" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/30/python-logging/" class="article-date">
+  <time datetime="2016-12-30T04:23:23.000Z" itemprop="datePublished">2016-12-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/12/30/python-logging/">Python logging 基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging</div><div class="line"></div><div class="line">logger=logging.getLogger(__name__)</div><div class="line">logger.setLevel(logging.INFO)</div><div class="line"></div><div class="line"><span class="comment"># 添加handler</span></div><div class="line">handler=logging.FileHandler(<span class="string">'hello.log'</span>)</div><div class="line">handler.setLevel(logging.INFO)</div><div class="line"><span class="comment"># handler可以有多个，所以用add</span></div><div class="line">logger.addHandler(handler)</div><div class="line"></div><div class="line"><span class="comment"># 设置格式</span></div><div class="line">formatter=logging.Formatter(<span class="string">'[%(asctime)s] [%(levelname)s] %(message)s'</span>, <span class="string">'%H:%M:%S'</span>)</div><div class="line"><span class="comment"># formatter只能有一个</span></div><div class="line">logger.setFormatter(formatter)</div></pre></td></tr></table></figure></p>
+<p>对于库来说，通常使用 <em>__name__</em> 来获取 Logger对象，然后只添加一个<code>NullHandler</code>，表示默认不会输出任何log:
+        
+          <p class="article-more-link">
+            <a href="/2016/12/30/python-logging/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2016/12/30/python-logging/" data-id="cj7lhaux6001gp3qf76e92j9o" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/logging/">logging</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+
+
+  <nav id="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/">下一页 &raquo;</a>
+  </nav>
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Misc/">Misc</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composer/">Composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pillow/">Pillow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/arrow/">arrow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hostname/">hostname</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logging/">logging</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/plantuml/">plantuml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xdebug/">xdebug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协程/">协程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原型模式/">原型模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/同源策略/">同源策略</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间/">时间</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间处理/">时间处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/跨域/">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/适配器模式/">适配器模式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/j178" target="_blank">Github</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+</div>
+</body>
+</html>

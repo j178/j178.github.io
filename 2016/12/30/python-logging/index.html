@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Python logging 基础 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一个例子：123456789101112131415import logginglogger=logging.getLogger(__name__)logger.setLevel(logging.INFO)# 添加handlerhandler=logging.FileHandler(&apos;hello.log&apos;)handler.setLevel(logging.INFO)# handler可以有多个，所">
+<meta name="keywords" content="Python,logging">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python logging 基础">
+<meta property="og:url" content="https://fafe.me/2016/12/30/python-logging/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一个例子：123456789101112131415import logginglogger=logging.getLogger(__name__)logger.setLevel(logging.INFO)# 添加handlerhandler=logging.FileHandler(&apos;hello.log&apos;)handler.setLevel(logging.INFO)# handler可以有多个，所">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-01-20T16:19:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python logging 基础">
+<meta name="twitter:description" content="一个例子：123456789101112131415import logginglogger=logging.getLogger(__name__)logger.setLevel(logging.INFO)# 添加handlerhandler=logging.FileHandler(&apos;hello.log&apos;)handler.setLevel(logging.INFO)# handler可以有多个，所">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="fafe.me">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-python-logging" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/30/python-logging/" class="article-date">
+  <time datetime="2016-12-30T04:23:23.000Z" itemprop="datePublished">2016-12-30</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python logging 基础
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>一个例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging</div><div class="line"></div><div class="line">logger=logging.getLogger(__name__)</div><div class="line">logger.setLevel(logging.INFO)</div><div class="line"></div><div class="line"><span class="comment"># 添加handler</span></div><div class="line">handler=logging.FileHandler(<span class="string">'hello.log'</span>)</div><div class="line">handler.setLevel(logging.INFO)</div><div class="line"><span class="comment"># handler可以有多个，所以用add</span></div><div class="line">logger.addHandler(handler)</div><div class="line"></div><div class="line"><span class="comment"># 设置格式</span></div><div class="line">formatter=logging.Formatter(<span class="string">'[%(asctime)s] [%(levelname)s] %(message)s'</span>, <span class="string">'%H:%M:%S'</span>)</div><div class="line"><span class="comment"># formatter只能有一个</span></div><div class="line">logger.setFormatter(formatter)</div></pre></td></tr></table></figure></p>
+<p>对于库来说，通常使用 <em>__name__</em> 来获取 Logger对象，然后只添加一个<code>NullHandler</code>，表示默认不会输出任何log: <a id="more"></a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 设置默认日志处理方式，避免“未找到处理方法”的警告。</span></div><div class="line"><span class="keyword">import</span> logging</div><div class="line"><span class="keyword">try</span>:  <span class="comment"># Python 2.7+</span></div><div class="line">    <span class="keyword">from</span> logging <span class="keyword">import</span> NullHandler</div><div class="line"><span class="keyword">except</span> ImportError:</div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">NullHandler</span><span class="params">(logging.Handler)</span>:</span></div><div class="line">        <span class="function"><span class="keyword">def</span> <span class="title">emit</span><span class="params">(self, record)</span>:</span></div><div class="line">            <span class="keyword">pass</span></div><div class="line"></div><div class="line">logging.getLogger(__name__).addHandler(NullHandler())</div></pre></td></tr></table></figure>
+<p>什么情况下会抛出‘未找到处理方法’的异常呢？</p>
+<p>如果没有添加NullHandler()，即没有配置任何Handler，日志会被发给root，然后默认下root会怎么处理呢？试验的结果是：向终端输出了异常的信息。</p>
+<p>如果添加了NullHandler()，则没有任何输出。这是因为添加了NullHandler()，found不为0，不会去使用保底的手段，又因为root本身的handlers也为空，所以就只调用了NullHandler的handle，于是就什么也输出了。</p>
+<p>如果没添加NullHandler()，则会使用保底的lastResort手段，所以会向stderr写入log。</p>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><ol>
+<li>Handler send the log records (created by loggers) to the appropriate destination</li>
+<li>Fliters provide a finer grained facility for determining which log recoreds to output</li>
+<li>Formatters specify the layout of log records in the final output</li>
+</ol>
+<h2 id="Logger-对象"><a href="#Logger-对象" class="headerlink" title="Logger 对象"></a>Logger 对象</h2><p>Logger不会直接初始化，只能通过<code>logging.getLogger(name)</code>获取，多次以同样的<code>name</code>调用返回的是同一个对象。</p>
+<p><code>name</code>以<code>.</code>分隔，表示级别。如<code>foo.bar.baz</code>，<code>foo.bar</code>,<code>foo.bar.baz</code>,<code>foo.bam</code>都是<code>foo</code>的下一级。logger的分级与Python的模块分级类型，所以推荐的<code>name</code>值通常是<code>_name__</code>.</p>
+<ol>
+<li><p><code>Logger.propagate</code><br>如果为True，events logged to this logger除了发给handlers attatched to this logger外，还会传递给这个logger的父辈。默认为True。<br>如果只对root logger设置handler，这样所有后代logger的事件都会发送给这个handler处理，这样可以避免同一个日志被输出多次。</p>
+</li>
+<li><p><code>Logger.setLevel(lvl)</code><br>Set the threshold for this logger to <em>lvl</em>. 小于 <em>lvl</em> 的消息会被忽略。<br>root logger的默认level为WARNNING，其他logger默认为NOTSET.</p>
+</li>
+<li><p><code>Logger.isEnabledFor(lvl)</code><br>测试 <em>lvl</em> 级别的消息是否能被此logger处理</p>
+</li>
+<li><p><code>Logger.getEffectiveLevel</code><br>如果当前logger的level不为<code>NOTSET</code>, 则返回此level。 否则向上遍历，直到找到一个level不为<code>NOTSET</code>的logger.</p>
+</li>
+<li><p><code>Logger.getChild(suffix)</code></p>
+</li>
+<li><p><code>Logger.debug(msg, *args, **kwargs)</code><br>msg是一个消息格式化字符串，args是将要格式化的参数，即<code>msg % args</code><br>有三个关键字参数: <code>exc_info</code>, <code>stack_info</code>, <code>extra</code><br>extra用来填充<code>LogRecord.__dict__</code>，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">FORMAT = <span class="string">'%(asctime)-15s %(clientip)s %(user)-8s %(message)s'</span></div><div class="line">logging.basicConfig(format=FORMAT)</div><div class="line">d = &#123;<span class="string">'clientip'</span>: <span class="string">'192.168.0.1'</span>, <span class="string">'user'</span>: <span class="string">'fbloggs'</span>&#125;</div><div class="line">logger = logging.getLogger(<span class="string">'tcpserver'</span>)</div><div class="line">logger.warning(<span class="string">'Protocol problem: %s'</span>, <span class="string">'connection reset'</span>, extra=d)</div><div class="line">//输出</div><div class="line">//<span class="number">2006</span><span class="number">-02</span><span class="number">-08</span> <span class="number">22</span>:<span class="number">20</span>:<span class="number">02</span>,<span class="number">165</span> <span class="number">192.168</span><span class="number">.0</span><span class="number">.1</span> fbloggs  Protocol problem: connection reset</div></pre></td></tr></table></figure>
+</li>
+<li><p><code>Logger.hasHandlers</code><br>检查当前logger是否配置了任何handler，通过循环遍历其所有parent的handlers得到结果，如果有任何一个parent的handlers数组不为空，则返回True.</p>
+</li>
+<li><p>​</p>
+</li>
+</ol>
+<h2 id="LogRecord"><a href="#LogRecord" class="headerlink" title="LogRecord"></a>LogRecord</h2><p>Logger对象产生 LogRecord对象，传递给 <em>Handler</em>.   Logger和Handler都可以使用 <em>logging level</em> 和 <em>Filter</em>来决定他们感兴趣的 <em>LogRecord</em>对象。当需要output LogRecord时，一个 Handler使用一个 <em>Formatter</em>来格式化字符串并把它发送到 I/O流中。</p>
+<p>每个Logger记录一组 output Handlers，默认情况下，所有的 Logger也会将他们的输出发给他们的 ancestor Loggers。</p>
+<h2 id="Logging-级别"><a href="#Logging-级别" class="headerlink" title="Logging 级别"></a>Logging 级别</h2><table>
+<thead>
+<tr>
+<th>Level</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CRITICAL</td>
+<td>50</td>
+</tr>
+<tr>
+<td>ERROR</td>
+<td>40</td>
+</tr>
+<tr>
+<td>WARNNING</td>
+<td>30</td>
+</tr>
+<tr>
+<td>INFO</td>
+<td>20</td>
+</tr>
+<tr>
+<td>DEBUG</td>
+<td>10</td>
+</tr>
+<tr>
+<td>NOTSET</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="模块级函数"><a href="#模块级函数" class="headerlink" title="模块级函数"></a>模块级函数</h2><ol>
+<li><p><code>logging.getLogger(name=None)</code><br>如果name=None，则返回root logger。<br>因为相同名字返回的是同一个对象，所以logger不应该在程序的不同部分之间传递。</p>
+</li>
+<li><p><code>logging.debug(msg, *args, **kwargs)</code><br>Logs a message with level <code>DEBUG</code> on the root logger.</p>
+</li>
+<li><p><code>logging.disable(lvl)</code></p>
+</li>
+<li><p><code>logging.basicConfig(**kwargs)</code><br>创建一个<code>StreamHandler</code>,使用默认的<code>Formatter</code>，并把其加入到root logger中。模块级的<code>debug()</code>等函数都会自动调用<code>basicConfig()</code>，如果没有为root logger设置任何handler的话。</p>
+</li>
+</ol>
+<h2 id="最简单的使用："><a href="#最简单的使用：" class="headerlink" title="最简单的使用："></a>最简单的使用：</h2><ol>
+<li><p>在主线程的模块中，在其他线程启动之前调用<code>logging.basicConfig</code>为root logger设置基本的level和格式</p>
+</li>
+<li><p>其他模块中直接<code>import logging</code>，然后使用模块级的<code>logging.debug</code>即可。</p>
+</li>
+</ol>
+<h2 id="阅读源码"><a href="#阅读源码" class="headerlink" title="阅读源码"></a>阅读源码</h2><ol>
+<li>Logger类有一个root属性，指向的是RootLogger(WARNING).<br>RootLogger是Logger的一个子类，且Logger.name默认初始化为‘root’，此外没有区别。所以只要import了logging库，root就已经创建了，且作为所有Logger的一个属性。</li>
+<li>每个Logger都有一个parent属性，root.parent=None.</li>
+<li>每个Logger都有一个handlers数据和filters数组。</li>
+<li>Logger的callHandlers方法就是调用当前logger.handlers所有handler的handle方法，将record传给它，然后c=c.parent，继续调用父亲的所有handler，除非当前logger.propagate设为False.</li>
+<li>如果不使用basicConfig或者对root添加过任何handler，或者没有调用模块级的logging.debug等函数(它们会自动调用basicConfig)，那么root.handlers也为空。<br>此时还有一个保底的lastResort，默认为_StderrHandler。如果这个lastResort也被设为None，那么就会向stderr写入 ‘No handlers could be found for logger xx’。<br>那么什么这个lastResort会被设为None呢？这是新版本的行为，新版本中如果没有找到任何handler就会使用这个保底的handler，而不是是之前的显示’No handler xx‘警告。</li>
+<li><code>logging.basicConfig</code><br>只有当root.handlers为空时才会起作用。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2016/12/30/python-logging/" data-id="cj7lhaux6001gp3qf76e92j9o" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/logging/">logging</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/01/posix-thread/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          Posix Thread 基础
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/25/python-corroutine/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">Python 协程基础</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Misc/">Misc</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composer/">Composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pillow/">Pillow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/arrow/">arrow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hostname/">hostname</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logging/">logging</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/plantuml/">plantuml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xdebug/">xdebug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协程/">协程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原型模式/">原型模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/同源策略/">同源策略</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间/">时间</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间处理/">时间处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/跨域/">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/适配器模式/">适配器模式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/j178" target="_blank">Github</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,243 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>PHP 基础回顾 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="include/require如果没有提供路径，则会查找include_path，如果没有找到，则会查找当前脚本所在目录和当前工作目录。如果均失败的话，include 会产生一个 warnning，require会产生一个 fatal error. 当一个文件被 included时，被包含文件中的代码继承了include所在行的变量作用域。任何在include处可见的变量，对于被包含的代码也可见（">
+<meta name="keywords" content="PHP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PHP 基础回顾">
+<meta property="og:url" content="https://fafe.me/2017/01/18/php-beginning/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="include/require如果没有提供路径，则会查找include_path，如果没有找到，则会查找当前脚本所在目录和当前工作目录。如果均失败的话，include 会产生一个 warnning，require会产生一个 fatal error. 当一个文件被 included时，被包含文件中的代码继承了include所在行的变量作用域。任何在include处可见的变量，对于被包含的代码也可见（">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-01-20T16:20:56.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="PHP 基础回顾">
+<meta name="twitter:description" content="include/require如果没有提供路径，则会查找include_path，如果没有找到，则会查找当前脚本所在目录和当前工作目录。如果均失败的话，include 会产生一个 warnning，require会产生一个 fatal error. 当一个文件被 included时，被包含文件中的代码继承了include所在行的变量作用域。任何在include处可见的变量，对于被包含的代码也可见（">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="fafe.me">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-php-beginning" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/18/php-beginning/" class="article-date">
+  <time datetime="2017-01-18T13:00:43.000Z" itemprop="datePublished">2017-01-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      PHP 基础回顾
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="include-require"><a href="#include-require" class="headerlink" title="include/require"></a>include/require</h3><p>如果没有提供路径，则会查找<code>include_path</code>，如果没有找到，则会查找当前脚本所在目录和当前工作目录。如果均失败的话，include 会产生一个 warnning，require会产生一个 fatal error.</p>
+<p>当一个文件被 <code>included</code>时，被包含文件中的代码继承了<code>include</code>所在行的变量作用域。任何在<code>include</code>处可见的变量，对于被包含的代码也可见（相当于将被包含的代码复制并替换<code>include</code>命令。）但是，被包含文件中定义的函数和类都拥有全局作用域。</p>
+<p>在解析被包含的文件时，解析器会切换为 HTML模式，所以任何没有包含在 php tag中的文本都会当做HTML处理，也就是会被原样 echo 给客户端。</p>
+<p>include失败会返回FALSE，并产生一个warning。如果include成功，并且被包含文件中没有<code>return</code>语句，include会返回<code>1</code>。 如果被包含文件中有return语句，那么执行到return语句时，会停止对被包含文件的处理，并返回return提供的值，就像调用一个普通的函数一样。</p>
+<p>如果被包含文件中定义了函数，并且被包含了两次，则会造成 fatal error，因为函数已经被声明过了。最好使用 include_once。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ul>
+<li><code>sudo apt-add-repository ppa:ondrej/php5</code></li>
+<li><code>php-xxx</code>都是PHP的扩展包，比如<code>php-gd</code>，<code>php-mysql</code>，<code>php-xdebug</code>需要手动安装</li>
+<li>Apache 通过 <code>libapache2-mod-php7.1</code>模块与PHP互动，配置文件为<code>/etc/apache2/mod-enabled/php7.0/</code>中</li>
+<li><code>/usr/bin/php</code>也只是一个<code>alternative</code>，可以使用update-alternative改变当前<code>php</code>命令使用的版本</li>
+</ul>
+<p>安装过程中的处理：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div></pre></td><td class="code"><pre><div class="line">Setting up php7.1-common (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/calendar.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/ctype.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/exif.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/fileinfo.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/ftp.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/gettext.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/iconv.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/pdo.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/phar.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/posix.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/shmop.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sockets.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvmsg.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvsem.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvshm.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/tokenizer.ini with new version</div><div class="line">Setting up php7.1-json (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/json.ini with new version</div><div class="line">Setting up php7.1-opcache (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/opcache.ini with new version</div><div class="line">Setting up php7.1-readline (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/readline.ini with new version</div><div class="line">Setting up php7.1-cli (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line">update-alternatives: using /usr/bin/php7.1 to provide /usr/bin/php (php) <span class="keyword">in</span> auto mode</div><div class="line">update-alternatives: using /usr/bin/phar7.1 to provide /usr/bin/phar (phar) <span class="keyword">in</span> auto mode</div><div class="line">update-alternatives: using /usr/bin/phar.phar7.1 to provide /usr/bin/phar.phar (phar.phar) <span class="keyword">in</span> auto mode</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/cli/php.ini with new version</div><div class="line">Setting up libapache2-mod-php7.1 (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/apache2/php.ini with new version</div><div class="line">libapache2-mod-php7.1: php7.0 module already enabled, not enabling PHP 7.1</div><div class="line">Setting up libapache2-mod-php (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.0-common (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mcrypt (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mbstring (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-xml (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-readline (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-opcache (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mysql (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-json (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libwebp5:amd64 (0.4.4-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libgd3:amd64 (2.2.3-3+deb.sury.org~xenial+0) ...</div><div class="line">Setting up php7.0-gd (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-curl (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-cli (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Replacing config file /etc/php/7.0/cli/php.ini with new version</div><div class="line">Setting up libapache2-mod-php7.0 (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Installing new version of config file /etc/apache2/mods-available/php7.0.load ...</div><div class="line">libapache2-mod-php7.0: not switching MPM - already enabled</div><div class="line">Setting up php7.0 (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libjbig0:amd64 (2.1-3.1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libpcre16-3:amd64 (2:8.39-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libsodium18:amd64 (1.0.10-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libssl-doc (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libssl-dev:amd64 (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libwebpmux1:amd64 (0.4.4-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libzmq5:amd64 (4.2.0-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up openssl (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.1-curl (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/curl.ini with new version</div><div class="line">Setting up php-curl (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-gd (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/gd.ini with new version</div><div class="line">Setting up php-gd (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-xml (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/dom.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/simplexml.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/wddx.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xml.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xmlreader.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xmlwriter.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xsl.ini with new version</div><div class="line">Setting up php-xml (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php-pear (1:1.10.1+submodules+notgz-8+donate.sury.org~xenial+2) ...</div><div class="line">Setting up php-gettext (1.0.11-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.1-mbstring (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mbstring.ini with new version</div><div class="line">Setting up php-mbstring (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-mcrypt (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mcrypt.ini with new version</div><div class="line">Setting up php-mcrypt (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-mysql (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mysqlnd.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mysqli.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/pdo_mysql.ini with new version</div><div class="line">Setting up php-mysql (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php-xdebug (2.5.0-1+deb.sury.org~xenial+1) ...</div><div class="line">Processing triggers <span class="keyword">for</span> libc-bin (2.23-0ubuntu5) ...</div><div class="line">Processing triggers <span class="keyword">for</span> libapache2-mod-php7.1 (7.1.0-5+deb.sury.org~xenial+1) ...</div></pre></td></tr></table></figure>
+<ul>
+<li>问题，现在通过<code>a2enmod php7.1</code>启用了PHP7.1，那么对于PHP的请求，会交给PHP7.0呢？还是PHP7.1呢？ =》 默认的还是PHP7.0，需要自己手动 <code>a2dismod php7.0</code>才行</li>
+<li>php-pear是什么？</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/18/php-beginning/" data-id="cj7lhauxa001pp3qf3brjr18y" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/01/18/apache-config/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          Apache 配置学习
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/01/01/posix-thread/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">Posix Thread 基础</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Misc/">Misc</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composer/">Composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pillow/">Pillow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/arrow/">arrow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hostname/">hostname</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logging/">logging</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/plantuml/">plantuml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xdebug/">xdebug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协程/">协程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原型模式/">原型模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/同源策略/">同源策略</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间/">时间</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间处理/">时间处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/跨域/">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/适配器模式/">适配器模式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/j178" target="_blank">Github</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+</div>
+</body>
+</html>

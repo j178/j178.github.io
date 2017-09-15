@@ -1,0 +1,306 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Python 协程基础 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="基础 定义协程(coroutine)的两种方式：async def或使用generator实现。基于generator的协程应该使用@asyncio.coroutine修饰，但这并不是严格要求的，基于generator的协程使用yield from语法。">
+<meta name="keywords" content="Python,协程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python 协程基础">
+<meta property="og:url" content="https://fafe.me/2016/12/25/python-corroutine/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="基础 定义协程(coroutine)的两种方式：async def或使用generator实现。基于generator的协程应该使用@asyncio.coroutine修饰，但这并不是严格要求的，基于generator的协程使用yield from语法。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-01-20T16:19:22.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python 协程基础">
+<meta name="twitter:description" content="基础 定义协程(coroutine)的两种方式：async def或使用generator实现。基于generator的协程应该使用@asyncio.coroutine修饰，但这并不是严格要求的，基于generator的协程使用yield from语法。">
+  
+    <link rel="alternative" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="fafe.me">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-python-corroutine" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/25/python-corroutine/" class="article-date">
+  <time datetime="2016-12-24T16:53:26.000Z" itemprop="datePublished">2016-12-25</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python 协程基础
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
+<li><p>定义协程(coroutine)的两种方式：<code>async def</code>或使用generator实现。<br>基于generator的协程应该使用<code>@asyncio.coroutine</code>修饰，但这并不是严格要求的，基于generator的协程使用<code>yield from</code>语法。<a id="more"></a></p>
+</li>
+<li><p><code>coroutine</code>这个词有两种意思：</p>
+<ol>
+<li>定义协程的<strong>函数</strong><br>使用<code>async def</code>或<code>@asyncio.coroutine</code>。无歧义的称呼是<code>coroutine function</code>,<code>isroutinefunction()</code>返回<code>True</code>。</li>
+<li>调用协程函数获得的<strong>对象</strong><br>这个对象表示一个可结束的<strong>计算</strong>或<strong>I/O操作</strong>。无歧义的称呼是<code>coroutine object</code>,<code>iscoroutine()</code>返回<code>True</code>。</li>
+</ol>
+</li>
+<li><p>协程可以做的事：</p>
+<ul>
+<li><p><code>result = await future</code>或<code>result = yield from future</code><br>暂停协程，直到future完成，然后返回<code>future</code>的结果，或者抛出一个异常。</p>
+</li>
+<li><p><code>result = await coroutine</code> 或 <code>result = yield from coroutine</code><br>等待另一个协程产生结果(或者抛出一个异常)。<code>coroutine</code>表达式必须为对另一个协程的<code>调用</code>。</p>
+</li>
+<li><p><code>return expersssion</code> 产生结果，结果传递给那些使用<code>await</code>或<code>yield from</code>等待此协程的协程。</p>
+</li>
+<li><p><code>raise exception</code> 抛出异常。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="asyncio"><a href="#asyncio" class="headerlink" title="asyncio"></a>asyncio</h2><ul>
+<li><p><code>asyncio.get_event_loop</code></p>
+</li>
+<li><p><code>asyncio.ensure_future(coro_or_future, *, loop=None)</code><br>将coroutine object包装在future中，返回<code>Task</code>对象。</p>
+</li>
+<li><p><code>BaseEventLoop.run_until_complete(future)</code><br>阻塞，直到future完成，返回future的结果。<br>如果参数是一个<code>coroutine object</code>，则使用<code>ensure_future()</code>包装一下。</p>
+</li>
+</ul>
+<h2 id="本质"><a href="#本质" class="headerlink" title="本质"></a>本质</h2><ol>
+<li><p>添加任务到事件循环中</p>
+</li>
+<li><p>每一次循环，从队列中取出一个任务，对其调用send，让其继续执行，将send的结果继续添加到任务队列中。如果调用send抛出了<code>StopIteration</code>异常，则表示任务已经完成了，则不再添加到队列中。</p>
+</li>
+<li><p><code>await future</code>，future 抛出的<code>StopIteration</code>由await捕获，并从<code>StopIteration</code></p>
+<p>对象的第一参数中获取<code>future</code>的结果，作为await的返回值，此时被等待的<code>future</code>已经完成，继续执行当前coroutine之后的代码。</p>
+<p>如果future没有抛出异常，则future中<code>yield</code>的结果经由这个await(或者yield from)向上传递，一直到调用<code>send</code>的那个语句中(一般是事件循环中)，作为send的返回值。</p>
+<p>所以一直都是最深层次的任务和事件循环在打交道，与途中的await没有关系，只有当最底层的future完成之后，才开始执行其上一层的任务。</p>
+</li>
+</ol>
+<h2 id="疑问"><a href="#疑问" class="headerlink" title="疑问"></a>疑问</h2><ol>
+<li><p>第一个<code>send(None)</code>或者<code>next(coro)</code>的返回值是什么？</p>
+<p>第一次 send 使 generator 开始执行，直到遇到第一个 yield</p>
+<p>此时 generator 让出执行权，将 yield 表达式的值作为 send 的返回值，此时 generator 内部 yield 左边的赋值并没有进行，而是在这之间就 yield(让步)了。</p>
+<p>第二次调用 send(something), 则从 yield 赋值语句开始恢复，send 的参数作为 yield 的返回值，赋给左边的变量，继续执行。</p>
+</li>
+<li><p>yield 与 yield from 有什么区别？</p>
+<p>函数中的 yield 使函数成为 generator，当 generator 到达末尾时(自然结束或遇到 return 语句)，会抛出<code>StopIteration</code>异常。</p>
+<p>Python3.3 之后，return 语句的参数会成为<code>StopIteration</code>的 value 参数(<code>raise StopIteration(value=something)</code>)。</p>
+<p>普通的由 yield 创造的 generator 一般会忽略 StopIteraion.value，也就是忽略reurn的值，只将StopIteration作为generator exhausted的条件。而<code>yield from</code> 会捕获<code>StopIteraion</code> 异常，并获取其 value 参数，作为自己的返回值。看上去没什么大不了，但却是后来<code>await</code>的基础。</p>
+</li>
+<li><p>？？</p>
+<p>如果yield from future， future 没有 return，那么 future 中 yield 产生的值都会<strong>经过</strong> yield from 向更高层传递，最终到达事件循环，与 yield from 一点关系也没有。当 futurn return时，yield from 很开心，终于不用做传话人了，于是获取 futurn 的结果，作为自己的返回值，也就意味着这个future resolve了，这个异步任务完成了。</p>
+<p>本来使用yield可以产生任意类型的值，yield from都会将其逐步传递到最顶层作为 send 的返回值。但是因为最顶层一般是事件循环，它需要将 send 的结果，继续添加到任务队列中，之后再从队列中将其取出，对其调用 send 方法(或next)让其继续执行。所以这个对象就必须有一些特殊要求，这个要求就是awaitable???? Future? Task?</p>
+</li>
+<li><p>await与yield from的区别？</p>
+<p>await比yield from只多了一步参数检查：await只接受<strong>awaitable</strong>对象，包括：</p>
+<ul>
+<li>一个 <em>native coroutine object</em> returned from <em>native coroutine function</em></li>
+<li><em>generator-based coroutine object</em> returned from a functin decoreated with <code>asyncio.coroutine()</code></li>
+<li>an object with an __await__  method returning an iterator.</li>
+</ul>
+<p>任何 yield from 链都是以 yield 结尾的，这是 Future 实现的基础。每个await 都是被 await链底端的 yield 暂停的。</p>
+</li>
+</ol>
+<h2 id="async-与-await-语法"><a href="#async-与-await-语法" class="headerlink" title="async 与 await 语法"></a>async 与 await 语法</h2><ul>
+<li>async def 函数永远是协程，即使它不包含await表达式</li>
+<li>async 函数中使用 yield 或 yield from 是语法错误</li>
+<li>async def 定义的是 native coroutine，设置了 <code>CO_COROUTINE</code>标志</li>
+<li><em>generator-based coroutine</em> 与 native coroutine 兼容，设置了 <code>CO_ITERABLE_COROUTINE</code> 标志</li>
+<li>在async def 函数外使用 await 是语法错误</li>
+<li>为 await 传递非awaitable对象会报 TypeError</li>
+</ul>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><ul>
+<li><a href="https://snarky.ca/how-the-heck-does-async-await-work-in-python-3-5/" target="_blank" rel="external"></a></li>
+<li><a href="https://docs.python.org/3/library/asyncio.htmll" target="_blank" rel="external">asyncio — Asynchronous I/O, event loop, coroutines and tasks</a></li>
+<li><a href="https://www.python.org/dev/peps/pep-0492/#examples-of-await-expressions" target="_blank" rel="external">PEP 492 – Coroutines with async and await syntax</a></li>
+<li><a href="https://www.python.org/dev/peps/pep-3156/" target="_blank" rel="external">PEP 3156 – Asynchronous IO Support Rebooted: the “asyncio” Module</a></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2016/12/25/python-corroutine/" data-id="cj7lhaux5001cp3qfp81a4g4s" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/协程/">协程</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/30/python-logging/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">
+        
+          Python logging 基础
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/18/jupyter-notebook/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">Jupyter Notebook 初试</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Misc/">Misc</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composer/">Composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pillow/">Pillow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/arrow/">arrow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hostname/">hostname</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logging/">logging</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/plantuml/">plantuml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xdebug/">xdebug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协程/">协程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原型模式/">原型模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/同源策略/">同源策略</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间/">时间</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间处理/">时间处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/跨域/">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/适配器模式/">适配器模式</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/j178" target="_blank">Github</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 John Doe<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+</div>
+</body>
+</html>

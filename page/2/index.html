@@ -62,10 +62,120 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-python-corroutine" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-127.0.0.1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/12/25/python-corroutine/" class="article-date">
-  <time datetime="2016-12-24T16:53:26.000Z" itemprop="datePublished">2016-12-25</time>
+    <a href="/2017/01/19/127.0.0.1/" class="article-date">
+  <time datetime="2017-01-19T10:55:43.000Z" itemprop="datePublished">2017-01-19</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Misc/">Misc</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/19/127.0.0.1/">127.0.1.1是什么？</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Some software (e.g., GNOME) expects the system hostname to be resolvable to an IP address with a canonical fully qualified domain name. This is really improper because system hostnames and domain names are two very different things; but there you have it. In order to support that software, it is necessary to ensure that the system hostname can be resolved. Most often this is done by putting a line in <code>/etc/hosts</code> containing some IP address and the system hostname. If your system has a permanent IP address then use that; otherwise use the address 127.0.1.1.</p>
+<p><code>/etc/hosts</code></p>
+<p><code>/etc/hostname</code></p>
+<p>The system hostname should always be resolvable even when the network is down. Basically, some applications still try to resolve a host via 127.0.1.1 so in order to accommodate, it is kept by default on current debian-type distributions.</p>
+<p>The general rule of thumb is: If you don’t have a permanent IP address for your host, use 127.0.1.1.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://fafe.me/2017/01/19/127.0.0.1/" data-id="cj7ln38ip001srvqf4ux12fo2" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hostname/">hostname</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-apache-config" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/18/apache-config/" class="article-date">
+  <time datetime="2017-01-18T15:55:43.000Z" itemprop="datePublished">2017-01-18</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/后端/">后端</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/18/apache-config/">Apache 配置学习</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h2><ul>
+<li>配置文件<code>/etc/apach2/apache2.conf</code>以及<code>/etc/apache2/conf-enabled</code></li>
+<li><code>DirectoryIndex index.html index.php</code> 优先级从左到右降低</li>
+<li>包含外部配置文件 <code>Include xxx</code></li>
+</ul>
+<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p><code>apachectl</code>脚本，从<code>/etc/apache2/envavars</code>中读取并设置一些环境变量</p>
+<h2 id="Rewrite"><a href="#Rewrite" class="headerlink" title="Rewrite"></a>Rewrite</h2><p>基于正则表达式的规则，动态修改 incoming URl requests。</p>
+<h2 id="Virtual-Host"><a href="#Virtual-Host" class="headerlink" title="Virtual Host"></a>Virtual Host</h2><p>用同一个 Apache 服务器上搭建多个服务，根据用户请求中不同的 Host首部（或其他条件） 将请求转给不同的<code>VirtualHost</code>来处理。</p>
+<h3 id="Name-based-vs-IP-based-Virtual-Hosts"><a href="#Name-based-vs-IP-based-Virtual-Hosts" class="headerlink" title="Name-based vs IP-based Virtual Hosts"></a>Name-based vs IP-based Virtual Hosts</h3><p>基于IP的虚拟主机，要求服务器有多个IP，Apache根据用户请求的IP来转发到相应的主机中<br>基于名字的虚拟主机，要求客户端在HTTP首部中包含主机的名字，这样多个主机就可以共享同一个IP。<br>基于名字(hostname)的虚拟主机，通常只需要将多个域名解析到同一个IP即可。<br>比如说，login.a.com和logout.a.com只想相同的IP，也使用相同的端口（即后台的web服务器是同一个），但是后台的web服务器却可以根据请求中的Host首部不同，为他们提供不同的服务。</p>
+<h3 id="服务器如何选择合适的-name-based-virtual-host"><a href="#服务器如何选择合适的-name-based-virtual-host" class="headerlink" title="服务器如何选择合适的 name-based virtual host?"></a>服务器如何选择合适的 name-based virtual host?</h3><p>先进行 IP-based的选择，也就是先根据请求的IP选择出为此IP服务的Virtual Host，然后再从中找出最符合的name-based virtual host。</p>
+<p>先根据IP和端口选出一组最符合的hosts，然后根据<code>ServerName</code>和<code>ServerAlias</code>作比较。如果没有符合的ServerName和ServerAlias，则选择列出的第一个。</p>
+<p>省略ServerName则默认使用fully qualified domain name。</p>
+<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://httpd.apache.org/docs/2.4/vhosts/name-based.html" target="_blank" rel="external"></a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://fafe.me/2017/01/18/apache-config/" data-id="cj7ln38in001nrvqfl0bbpp9r" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Apache/">Apache</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-php-beginning" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/18/php-beginning/" class="article-date">
+  <time datetime="2017-01-18T13:00:43.000Z" itemprop="datePublished">2017-01-18</time>
 </a>
     
   <div class="article-category">
@@ -80,7 +190,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/25/python-corroutine/">Python 协程基础</a>
+      <a class="article-title" href="/2017/01/18/php-beginning/">PHP 基础回顾</a>
     </h1>
   
 
@@ -88,189 +198,35 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><ul>
-<li><p>定义协程(coroutine)的两种方式：<code>async def</code>或使用generator实现。<br>基于generator的协程应该使用<code>@asyncio.coroutine</code>修饰，但这并不是严格要求的，基于generator的协程使用<code>yield from</code>语法。
-        
-          <p class="article-more-link">
-            <a href="/2016/12/25/python-corroutine/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://fafe.me/2016/12/25/python-corroutine/" data-id="cj7ln38ij001crvqfje821skf" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/协程/">协程</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-jupyter-notebook" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/12/18/jupyter-notebook/" class="article-date">
-  <time datetime="2016-12-17T18:39:56.000Z" itemprop="datePublished">2016-12-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/18/jupyter-notebook/">Jupyter Notebook 初试</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p><code>pip3 install jupyter --user</code></p>
-<p>Jupyter Notebook的kernel是<code>IPython</code>, 这样Notebook才可以使用<code>Python</code>. 也可以安装kernel, 比如 R, Julia.
-        
-          <p class="article-more-link">
-            <a href="/2016/12/18/jupyter-notebook/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://fafe.me/2016/12/18/jupyter-notebook/" data-id="cj7ln38ii0019rvqfcgn8mg6q" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-shell-basic" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/12/03/shell-basic/" class="article-date">
-  <time datetime="2016-12-03T15:45:38.000Z" itemprop="datePublished">2016-12-03</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/03/shell-basic/">Shell 基础</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li><p>source</p>
-<p>也可以简写为 <code>.</code> ，这也是通用的兼容写法</p>
-<p>在当前的shell中执行文件中命令，所以文件中的命令可以读取到当前shell中的变量(不一定是环境变量)，等同于在命令行一条一条地敲入命令执行。
-        
-          <p class="article-more-link">
-            <a href="/2016/12/03/shell-basic/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://fafe.me/2016/12/03/shell-basic/" data-id="cj7ln38ih0015rvqfrfh8kjwg" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/shell/">shell</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-linux-runlevel" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/12/02/linux-runlevel/" class="article-date">
-  <time datetime="2016-12-01T20:27:13.000Z" itemprop="datePublished">2016-12-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/Linux/">Linux</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/12/02/linux-runlevel/">Linux 中的 runlevel</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>6个典型的运行级别：</p>
+        <h3 id="include-require"><a href="#include-require" class="headerlink" title="include/require"></a>include/require</h3><p>如果没有提供路径，则会查找<code>include_path</code>，如果没有找到，则会查找当前脚本所在目录和当前工作目录。如果均失败的话，include 会产生一个 warnning，require会产生一个 fatal error.</p>
+<p>当一个文件被 <code>included</code>时，被包含文件中的代码继承了<code>include</code>所在行的变量作用域。任何在<code>include</code>处可见的变量，对于被包含的代码也可见（相当于将被包含的代码复制并替换<code>include</code>命令。）但是，被包含文件中定义的函数和类都拥有全局作用域。</p>
+<p>在解析被包含的文件时，解析器会切换为 HTML模式，所以任何没有包含在 php tag中的文本都会当做HTML处理，也就是会被原样 echo 给客户端。</p>
+<p>include失败会返回FALSE，并产生一个warning。如果include成功，并且被包含文件中没有<code>return</code>语句，include会返回<code>1</code>。 如果被包含文件中有return语句，那么执行到return语句时，会停止对被包含文件的处理，并返回return提供的值，就像调用一个普通的函数一样。</p>
+<p>如果被包含文件中定义了函数，并且被包含了两次，则会造成 fatal error，因为函数已经被声明过了。最好使用 include_once。</p>
+<h1 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h1><ul>
+<li><code>sudo apt-add-repository ppa:ondrej/php5</code></li>
+<li><code>php-xxx</code>都是PHP的扩展包，比如<code>php-gd</code>，<code>php-mysql</code>，<code>php-xdebug</code>需要手动安装</li>
+<li>Apache 通过 <code>libapache2-mod-php7.1</code>模块与PHP互动，配置文件为<code>/etc/apache2/mod-enabled/php7.0/</code>中</li>
+<li><code>/usr/bin/php</code>也只是一个<code>alternative</code>，可以使用update-alternative改变当前<code>php</code>命令使用的版本</li>
+</ul>
+<p>安装过程中的处理：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div></pre></td><td class="code"><pre><div class="line">Setting up php7.1-common (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/calendar.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/ctype.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/exif.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/fileinfo.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/ftp.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/gettext.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/iconv.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/pdo.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/phar.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/posix.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/shmop.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sockets.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvmsg.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvsem.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/sysvshm.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/tokenizer.ini with new version</div><div class="line">Setting up php7.1-json (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/json.ini with new version</div><div class="line">Setting up php7.1-opcache (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/opcache.ini with new version</div><div class="line">Setting up php7.1-readline (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/readline.ini with new version</div><div class="line">Setting up php7.1-cli (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line">update-alternatives: using /usr/bin/php7.1 to provide /usr/bin/php (php) <span class="keyword">in</span> auto mode</div><div class="line">update-alternatives: using /usr/bin/phar7.1 to provide /usr/bin/phar (phar) <span class="keyword">in</span> auto mode</div><div class="line">update-alternatives: using /usr/bin/phar.phar7.1 to provide /usr/bin/phar.phar (phar.phar) <span class="keyword">in</span> auto mode</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/cli/php.ini with new version</div><div class="line">Setting up libapache2-mod-php7.1 (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/apache2/php.ini with new version</div><div class="line">libapache2-mod-php7.1: php7.0 module already enabled, not enabling PHP 7.1</div><div class="line">Setting up libapache2-mod-php (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.0-common (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mcrypt (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mbstring (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-xml (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-readline (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-opcache (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-mysql (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-json (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libwebp5:amd64 (0.4.4-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libgd3:amd64 (2.2.3-3+deb.sury.org~xenial+0) ...</div><div class="line">Setting up php7.0-gd (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-curl (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.0-cli (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Replacing config file /etc/php/7.0/cli/php.ini with new version</div><div class="line">Setting up libapache2-mod-php7.0 (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Installing new version of config file /etc/apache2/mods-available/php7.0.load ...</div><div class="line">libapache2-mod-php7.0: not switching MPM - already enabled</div><div class="line">Setting up php7.0 (7.0.14-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libjbig0:amd64 (2.1-3.1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libpcre16-3:amd64 (2:8.39-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libsodium18:amd64 (1.0.10-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libssl-doc (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libssl-dev:amd64 (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libwebpmux1:amd64 (0.4.4-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up libzmq5:amd64 (4.2.0-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up openssl (1.0.2j-1+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.1-curl (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/curl.ini with new version</div><div class="line">Setting up php-curl (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-gd (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/gd.ini with new version</div><div class="line">Setting up php-gd (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-xml (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/dom.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/simplexml.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/wddx.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xml.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xmlreader.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xmlwriter.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/xsl.ini with new version</div><div class="line">Setting up php-xml (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php-pear (1:1.10.1+submodules+notgz-8+donate.sury.org~xenial+2) ...</div><div class="line">Setting up php-gettext (1.0.11-2+deb.sury.org~xenial+1) ...</div><div class="line">Setting up php7.1-mbstring (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mbstring.ini with new version</div><div class="line">Setting up php-mbstring (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-mcrypt (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mcrypt.ini with new version</div><div class="line">Setting up php-mcrypt (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php7.1-mysql (7.1.0-5+deb.sury.org~xenial+1) ...</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mysqlnd.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/mysqli.ini with new version</div><div class="line"></div><div class="line">Creating config file /etc/php/7.1/mods-available/pdo_mysql.ini with new version</div><div class="line">Setting up php-mysql (1:7.1+49+deb.sury.org~xenial+4) ...</div><div class="line">Setting up php-xdebug (2.5.0-1+deb.sury.org~xenial+1) ...</div><div class="line">Processing triggers <span class="keyword">for</span> libc-bin (2.23-0ubuntu5) ...</div><div class="line">Processing triggers <span class="keyword">for</span> libapache2-mod-php7.1 (7.1.0-5+deb.sury.org~xenial+1) ...</div></pre></td></tr></table></figure>
 <ul>
-<li>0 停机，关机</li>
-<li>1 单用户，无网络连接，不运行守护进程，不允许非超级用户登录</li>
-<li>2 多用户，无网络连接，不运行守护进程</li>
-<li>3 多用户，正常启动系统</li>
-<li>4 用户自定义</li>
-<li>5 多用户，带图形界面</li>
-<li>6 重启
-        
-          <p class="article-more-link">
-            <a href="/2016/12/02/linux-runlevel/#more">Read More</a>
-          </p>
-        
+<li>问题，现在通过<code>a2enmod php7.1</code>启用了PHP7.1，那么对于PHP的请求，会交给PHP7.0呢？还是PHP7.1呢？ =》 默认的还是PHP7.0，需要自己手动 <code>a2dismod php7.0</code>才行</li>
+<li>php-pear是什么？</li>
+</ul>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://fafe.me/2016/12/02/linux-runlevel/" data-id="cj7ln38ig0013rvqft3g5p3r8" class="article-share-link">分享到</a>
+        <a data-url="http://fafe.me/2017/01/18/php-beginning/" data-id="cj7ln38io001prvqfklsjedhp" class="article-share-link">分享到</a>
       
 
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/linux/">linux</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li></ul>
 
     </footer>
   </div>
@@ -279,10 +235,58 @@
 
 
   
-    <article id="post-python-time-datetime" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-posix-thread" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2016/10/02/python-time-datetime/" class="article-date">
-  <time datetime="2016-10-02T06:38:06.000Z" itemprop="datePublished">2016-10-02</time>
+    <a href="/2017/01/01/posix-thread/" class="article-date">
+  <time datetime="2016-12-31T16:14:03.000Z" itemprop="datePublished">2017-01-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/01/posix-thread/">Posix Thread 基础</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="线程概念"><a href="#线程概念" class="headerlink" title="线程概念"></a>线程概念</h3><p>一个线程包含在进程中表示一个 execution context 的必要信息，包括 <em>thread ID</em>, a set of register values, a stack, a scheduling priority and policy, a signal mask, an <code>errno</code> variable, and thread-specific data.</p>
+<p>进程中的所有东西都是线程间共享的，包括 text of the executable program, the programs’s global and heap memory, the stacks, and the file descriptors.
+        
+          <p class="article-more-link">
+            <a href="/2017/01/01/posix-thread/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://fafe.me/2017/01/01/posix-thread/" data-id="cj7ln38im001krvqf09zzxlio" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Thread/">Thread</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-python-logging" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/30/python-logging/" class="article-date">
+  <time datetime="2016-12-30T04:23:23.000Z" itemprop="datePublished">2016-12-30</time>
 </a>
     
   <div class="article-category">
@@ -297,7 +301,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/02/python-time-datetime/">Python 中的时间模块</a>
+      <a class="article-title" href="/2016/12/30/python-logging/">Python logging 基础</a>
     </h1>
   
 
@@ -305,328 +309,24 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="time"><a href="#time" class="headerlink" title="time"></a>time</h3><p>time 模块比较简单, 常用的函数只有几个, 但是这个模块中的函数名都很奇怪, 估计是模仿 *inx 的时间函数风格, 也查不到到底是什么的缩写, 那就不管它好了.<br>
+        <p>一个例子：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> logging</div><div class="line"></div><div class="line">logger=logging.getLogger(__name__)</div><div class="line">logger.setLevel(logging.INFO)</div><div class="line"></div><div class="line"><span class="comment"># 添加handler</span></div><div class="line">handler=logging.FileHandler(<span class="string">'hello.log'</span>)</div><div class="line">handler.setLevel(logging.INFO)</div><div class="line"><span class="comment"># handler可以有多个，所以用add</span></div><div class="line">logger.addHandler(handler)</div><div class="line"></div><div class="line"><span class="comment"># 设置格式</span></div><div class="line">formatter=logging.Formatter(<span class="string">'[%(asctime)s] [%(levelname)s] %(message)s'</span>, <span class="string">'%H:%M:%S'</span>)</div><div class="line"><span class="comment"># formatter只能有一个</span></div><div class="line">logger.setFormatter(formatter)</div></pre></td></tr></table></figure></p>
+<p>对于库来说，通常使用 <em>__name__</em> 来获取 Logger对象，然后只添加一个<code>NullHandler</code>，表示默认不会输出任何log:
         
           <p class="article-more-link">
-            <a href="/2016/10/02/python-time-datetime/#more">Read More</a>
+            <a href="/2016/12/30/python-logging/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://fafe.me/2016/10/02/python-time-datetime/" data-id="cj7ln38if000zrvqfqecicfc7" class="article-share-link">分享到</a>
+        <a data-url="http://fafe.me/2016/12/30/python-logging/" data-id="cj7ln38ik001grvqf3avcr5my" class="article-share-link">分享到</a>
       
 
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/时间处理/">时间处理</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-python-arrow" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/10/02/python-arrow/" class="article-date">
-  <time datetime="2016-10-01T16:22:47.000Z" itemprop="datePublished">2016-10-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/02/python-arrow/">Arrow: better dates and times for Python</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Python 中时间处理的库太多, 基本的有<code>time</code>, 复杂的有<code>datetime</code>, 日历处理有<code>Calendar</code>, 各种时区信息的库… 各个库中函数的命名也十分让人崩溃,比如<code>time</code>中的<code>ctime()</code>, <code>asctime()</code>, <code>strftime()</code>, <code>strptime()</code>, <code>localtime()</code>你能记得住这些函数分别接受什么参数, 起什么作用吗? 我觉得挺崩溃的.
-        
-          <p class="article-more-link">
-            <a href="/2016/10/02/python-arrow/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://fafe.me/2016/10/02/python-arrow/" data-id="cj7ln38ie000vrvqf3wjh9hrw" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/arrow/">arrow</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/时间/">时间</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hexo-plantuml" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/10/01/hexo-plantuml/" class="article-date">
-  <time datetime="2016-10-01T05:31:03.000Z" itemprop="datePublished">2016-10-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/工具/">工具</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/10/01/hexo-plantuml/">PlantUML: 用程序员的方式画图</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="PlantUML-简介"><a href="#PlantUML-简介" class="headerlink" title="PlantUML 简介"></a>PlantUML 简介</h3><p>PlantUML 是一个画图脚本语言，用它可以快速地画出：</p>
-<ul>
-<li>时序图</li>
-<li>流程图</li>
-<li>用例图</li>
-<li>状态图</li>
-<li>组件图
-        
-          <p class="article-more-link">
-            <a href="/2016/10/01/hexo-plantuml/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://fafe.me/2016/10/01/hexo-plantuml/" data-id="cj7ln38id000srvqf81ga8q2e" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hexo/">hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/plantuml/">plantuml</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-requests-http-for-human" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/30/requests-http-for-human/" class="article-date">
-  <time datetime="2016-09-29T16:00:00.000Z" itemprop="datePublished">2016-09-30</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/30/requests-http-for-human/">HTTP for Human: 深入研究 Requests</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>这是一篇学习 Requests 的随笔.</p>
-<h3 id="Python-回顾"><a href="#Python-回顾" class="headerlink" title="Python 回顾"></a>Python 回顾</h3><ul>
-<li><p><code>bytearray</code>是一个字节数组, 数组的内容是可变的, 数组中的每一个元素都是 <code>[0, 256)</code>之间的整数<br>定义为: <code>bytearray([source[, encoding[, errors]]])</code>
-        
-          <p class="article-more-link">
-            <a href="/2016/09/30/requests-http-for-human/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://fafe.me/2016/09/30/requests-http-for-human/" data-id="cj7ln38ic000orvqfgegjmpmm" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/requests/">requests</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-adapter-pattern" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/29/adapter-pattern/" class="article-date">
-  <time datetime="2016-09-29T13:18:06.000Z" itemprop="datePublished">2016-09-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/29/adapter-pattern/">设计模式(三): 适配器模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Java-回顾"><a href="#Java-回顾" class="headerlink" title="Java 回顾"></a>Java 回顾</h2><ul>
-<li><code>String</code> 内部实现是一个 <code>char</code> 数组</li>
-<li><code>String</code> 可以由<code>char[]</code> ,<code>int[]</code>, <code>byte[]</code> 生成, 其中<code>char</code>代表每一个字符, <code>int</code>代表一个<code>code point</code>, <code>byte</code> 需要根据相应的 <code>charset</code> 解码为<code>char</code>
-        
-          <p class="article-more-link">
-            <a href="/2016/09/29/adapter-pattern/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://fafe.me/2016/09/29/adapter-pattern/" data-id="cj7ln38ia000irvqf60f2uaic" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/适配器模式/">适配器模式</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-prototype-pattern" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2016/09/29/prototype-pattern/" class="article-date">
-  <time datetime="2016-09-29T03:19:46.000Z" itemprop="datePublished">2016-09-29</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/编程/">编程</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/09/29/prototype-pattern/">设计模式(一): 原型模式</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="Java-回顾"><a href="#Java-回顾" class="headerlink" title="Java 回顾"></a>Java 回顾</h2><h3 id="Java-访问权限控制"><a href="#Java-访问权限控制" class="headerlink" title="Java 访问权限控制"></a>Java 访问权限控制</h3><table>
-<thead>
-<tr>
-<th style="text-align:center">作用域</th>
-<th style="text-align:center">当前类</th>
-<th style="text-align:center">同一 package</th>
-<th style="text-align:center">子类</th>
-<th style="text-align:center">其他 package</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center"><code>public</code></td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center">✔</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>protected</code></td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center"><code>包作用域</code> (默认)</td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-<tr>
-<td style="text-align:center"><code>private</code></td>
-<td style="text-align:center">✔</td>
-<td style="text-align:center"></td>
-<td style="text-align:center"></td>
-</tr>
-</tbody>
-</table>
-<h3 id="方法覆盖-Method-Override"><a href="#方法覆盖-Method-Override" class="headerlink" title="方法覆盖 Method Override"></a>方法覆盖 Method Override</h3><p>方法覆盖中有一些必须要满足的条件, 这些条件基本都是为了保证多态的有效性, 或者说为了符合 <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank" rel="external">里氏替换原则</a>.<br>
-        
-          <p class="article-more-link">
-            <a href="/2016/09/29/prototype-pattern/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://fafe.me/2016/09/29/prototype-pattern/" data-id="cj7ln38ib000mrvqfwzbkt21o" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java/">java</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/原型模式/">原型模式</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/logging/">logging</a></li></ul>
 
     </footer>
   </div>
@@ -638,7 +338,7 @@
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/3/">下一页 &raquo;</a>
   </nav>
 </section>
       
@@ -655,9 +355,9 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Apache/">Apache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Composer/">Composer</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PHP/">PHP</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pillow/">Pillow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/TensorFlow/">TensorFlow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/arrow/">arrow</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hexo/">hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hostname/">hostname</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/logging/">logging</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/plantuml/">plantuml</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/requests/">requests</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/shell/">shell</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/super/">super</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/xdebug/">xdebug</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协程/">协程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/原型模式/">原型模式</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/同源策略/">同源策略</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间/">时间</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/时间处理/">时间处理</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/跨域/">跨域</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/适配器模式/">适配器模式</a><span class="tag-list-count">1</span></li></ul>
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/PHP/" style="font-size: 16.67px;">PHP</a> <a href="/tags/Pillow/" style="font-size: 10px;">Pillow</a> <a href="/tags/Python/" style="font-size: 20px;">Python</a> <a href="/tags/TensorFlow/" style="font-size: 10px;">TensorFlow</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/arrow/" style="font-size: 10px;">arrow</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hostname/" style="font-size: 10px;">hostname</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/logging/" style="font-size: 10px;">logging</a> <a href="/tags/plantuml/" style="font-size: 10px;">plantuml</a> <a href="/tags/requests/" style="font-size: 10px;">requests</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/super/" style="font-size: 10px;">super</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/协程/" style="font-size: 10px;">协程</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/同源策略/" style="font-size: 10px;">同源策略</a> <a href="/tags/时间/" style="font-size: 10px;">时间</a> <a href="/tags/时间处理/" style="font-size: 10px;">时间处理</a> <a href="/tags/设计模式/" style="font-size: 13.33px;">设计模式</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a>
     </div>
   </div>
 

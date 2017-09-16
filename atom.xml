@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>努力吧少年！</title>
+  <title>努力吧少年!</title>
   
   <subtitle>What hurts more, the pain of hard work or the pain of regret?</subtitle>
   <link href="/atom.xml" rel="self"/>
@@ -502,7 +502,7 @@
     <link href="https://fafe.me/2016/09/29/adapter-pattern/"/>
     <id>https://fafe.me/2016/09/29/adapter-pattern/</id>
     <published>2016-09-29T13:18:06.000Z</published>
-    <updated>2017-01-20T16:16:10.000Z</updated>
+    <updated>2017-09-15T09:11:50.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="Java-回顾"><a href="#Java-回顾" class="headerlink" title="Java 回顾"></a>Java 回顾</h2><ul><li><code>String</code> 内部实现是一个 <code>char</code> 数组</li><li><code>String</code> 可以由<code>char[]</code> ,<code>int[]</code>, <code>byte[]</code> 生成, 其中<code>char</code>代表每一个字符, <code>int</code>代表一个<code>code point</code>, <code>byte</code> 需要根据相应的 <code>charset</code> 解码为<code>char</code>  <a id="more"></a><h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2></li></ul><ol><li>新旧两个接口</li><li>实现旧接口的对象无法在支持新接口的设备上使用</li><li>新建一个转换器(adapter), 实现新的接口, 内部聚合一个旧接口的对象, 将对新接口的所有调用全部委托到旧的接口上去.</li></ol><h2 id="讲课内容"><a href="#讲课内容" class="headerlink" title="讲课内容"></a>讲课内容</h2><ul><li>DIP 接口由高层定义, 低层实现</li><li>类适配器, 使用继承, 只能适配一个类</li><li>对象适配器, 使用聚合</li></ul>]]></content>
     

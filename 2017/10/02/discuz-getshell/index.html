@@ -27,7 +27,7 @@
 <meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时27分59秒.jpg">
 <meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时38分00秒.jpg">
 <meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时39分13秒.jpg">
-<meta property="og:updated_time" content="2017-10-01T16:24:35.738Z">
+<meta property="og:updated_time" content="2017-10-01T16:32:51.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Discuz X 3.4 由任意文件删除到 Getshell">
 <meta name="twitter:description" content="初步分析先下载官方托管在码云上的 Discuz X 源码： 1$ git clone https://gitee.com/ComsenzDiscuz/DiscuzX.git 查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑： 查看其具体内容： 它删除了5个 unlink 语句…… 这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。 任意文件删除这部分的分析请参考这">
@@ -129,13 +129,13 @@
 <p><img src="截图 2017-10-01 23时27分59秒.jpg" alt="截图 2017-10-01 23时27分59秒"></p>
 <p>然后查看 config/uc_config.php 文件，发现我们的一句话已经写入了：<br><img src="截图 2017-10-01 23时38分00秒.jpg" alt="截图 2017-10-01 23时38分00秒"></p>
 <p>使用菜刀连接：<br><img src="截图 2017-10-01 23时39分13秒.jpg" alt="截图 2017-10-01 23时39分13秒"> </p>
-<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>最后，附上整个完整利用过程的 EXP：<br><a href="https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b" target="_blank" rel="external">https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b</a></p>
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>最后，附上整个利用过程的 EXP：<br><a href="https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b" target="_blank" rel="external">https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b</a></p>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://fafe.me/2017/10/02/discuz-getshell/" data-id="cj88ygn2l002dqfqfm34c4589" class="article-share-link">分享到</a>
+        <a data-url="https://fafe.me/2017/10/02/discuz-getshell/" data-id="cj88yt96200259pqfkgposdnc" class="article-share-link">分享到</a>
       
 
       

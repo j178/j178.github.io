@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Discuz X 3.4 由任意文件删除到 Getshell | 努力吧少年!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="初步分析先下载官方托管在码云上的 Discuz X 源码： 1$ git clone https://gitee.com/ComsenzDiscuz/DiscuzX.git 查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑： 查看其具体内容： 它删除了5个 unlink 语句…… 这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。 任意文件删除这部分的分析请参考这">
+<meta name="keywords" content="Hack">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Discuz X 3.4 由任意文件删除到 Getshell">
+<meta property="og:url" content="https://fafe.me/2017/10/02/discuz-getshell/index.html">
+<meta property="og:site_name" content="努力吧少年!">
+<meta property="og:description" content="初步分析先下载官方托管在码云上的 Discuz X 源码： 1$ git clone https://gitee.com/ComsenzDiscuz/DiscuzX.git 查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑： 查看其具体内容： 它删除了5个 unlink 语句…… 这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。 任意文件删除这部分的分析请参考这">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2021时29分18秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2021时31分17秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2022时03分20秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2022时10分36秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2022时59分56秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时11分59秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时14分11秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时05分25秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时19分06秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时20分58秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时27分59秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时38分00秒.jpg">
+<meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时39分13秒.jpg">
+<meta property="og:updated_time" content="2017-10-01T16:24:35.738Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Discuz X 3.4 由任意文件删除到 Getshell">
+<meta name="twitter:description" content="初步分析先下载官方托管在码云上的 Discuz X 源码： 1$ git clone https://gitee.com/ComsenzDiscuz/DiscuzX.git 查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑： 查看其具体内容： 它删除了5个 unlink 语句…… 这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。 任意文件删除这部分的分析请参考这">
+<meta name="twitter:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2021时29分18秒.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="努力吧少年!" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力吧少年!</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">What hurts more, the pain of hard work or the pain of regret?</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+      </nav>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-discuz-getshell" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/02/discuz-getshell/" class="article-date">
+  <time datetime="2017-10-01T16:14:34.000Z" itemprop="datePublished">2017-10-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Discuz X 3.4 由任意文件删除到 Getshell
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h2><p>先下载官方托管在码云上的 Discuz X 源码：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> https://gitee.com/ComsenzDiscuz/DiscuzX.git</div></pre></td></tr></table></figure>
+<p>查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑：<br><img src="截图 2017-10-01 21时29分18秒.jpg" alt="截图 2017-10-01 21时29分18秒"></p>
+<p>查看其具体内容：<br><img src="截图 2017-10-01 21时31分17秒.jpg" alt="截图 2017-10-01 21时31分17秒"></p>
+<p>它删除了5个 unlink 语句……</p>
+<p>这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。</p>
+<h2 id="任意文件删除"><a href="#任意文件删除" class="headerlink" title="任意文件删除"></a>任意文件删除</h2><p>这部分的分析请参考这里：<a href="https://paper.seebug.org/411/" target="_blank" rel="external">https://paper.seebug.org/411/</a> </p>
+<p>(别吐槽——这篇文章分析得很好，省了我很多字 :haha:)</p>
+<h2 id="文件删除能做什么"><a href="#文件删除能做什么" class="headerlink" title="文件删除能做什么"></a>文件删除能做什么</h2><p>通过上面那篇文章，想必大家都能复现文件删除的漏洞了。那么这个漏洞能做什么呢？难道只是单纯的破坏吗？</p>
+<p>我们知道， Discuz X 这类 CMS 软件，都会一个 install 目录，用来处理用户初次安装时的配置和数据库初始化。在安装完成后，会在 data 目录下生成一个 install.lock 文件。如果尝试再次访问 /install 来安装，检测到存在 install.lock，于是提示错误：<br><img src="截图 2017-10-01 22时03分20秒.jpg" alt="截图 2017-10-01 22时03分20秒"></p>
+<p>如果用户没有删除 install 目录，而且我们也可以利用文件删除漏洞的话，我们就可以删掉这个 instal.lock，然后重新安装 Discuz。而重装过程中一般都有写配置文件的步骤，可能会给我们写入一句话的机会。</p>
+<h2 id="分析重装过程"><a href="#分析重装过程" class="headerlink" title="分析重装过程"></a>分析重装过程</h2><p><code>install/index.php</code> 文件控制安装的过程，它的逻辑其实很简单。安装主要分为五个步骤：<br><img src="截图 2017-10-01 22时10分36秒.jpg" alt="截图 2017-10-01 22时10分36秒"></p>
+<ol>
+<li>show_license 显示是否接受协议，同意后跳到 env_check</li>
+<li>env_check 检查目录是否可写和 PHP的相关检测，然后跳到 app_reg</li>
+<li>app_reg 提示是否安装 UCenter Server，POST 到  app_reg，如果 install_ucenter=yes，直接重定向至 db_init，否则显示配置 ucenter 的表单</li>
+<li>db_init 要求填写数据库和网站信息，POST 到 db_init，这时会进行数据库连接和数据表的检查。所以填写的数据库地址等信息要求必须是目标站能够连接的真实的服务器。</li>
+<li>….</li>
+</ol>
+<p>在 db_init 的处理逻辑里，我们看到了想要的：<br><img src="截图 2017-10-01 22时59分56秒.jpg" alt="截图 2017-10-01 22时59分56秒"></p>
+<p>跟进 save_config_file 函数：<br><img src="截图 2017-10-01 23时11分59秒.jpg" alt="截图 2017-10-01 23时11分59秒"></p>
+<p>继续跟进  getvars 函数：<img src="截图 2017-10-01 23时14分11秒.jpg" alt="截图 2017-10-01 23时14分11秒"><br>结果却让人失望，这里的 addcslashes 会转义我们的引号，导致一句话无法逃逸出引号，无法执行。</p>
+<p>但是紧跟着的 install_uc_server 让我很开心：<br><img src="截图 2017-10-01 23时05分25秒.jpg" alt="截图 2017-10-01 23时05分25秒"></p>
+<p>跟进 install_uc_server:<br><img src="截图 2017-10-01 23时19分06秒.jpg" alt="截图 2017-10-01 23时19分06秒"></p>
+<p>发现它没有对传入的参数做任何过滤，传入了 save_uc_config 中:<br><img src="截图 2017-10-01 23时20分58秒.jpg" alt="截图 2017-10-01 23时20分58秒"><br>同样 save_uc_config 也没有做任何处理，直接拼接到配置文件字符串中，然后写入了文件。</p>
+<p>因为 dbhost, dbuser 等参数需要用来连接数据库，所以我们能利用的就只有 tablepre 了，也就是我们指定的数据库前缀。我们构造这样的 tablepre:</p>
+<pre><code>x&apos;);@eval($_POST[pwd]);(&apos;
+</code></pre><p>实验一下：</p>
+<p><img src="截图 2017-10-01 23时27分59秒.jpg" alt="截图 2017-10-01 23时27分59秒"></p>
+<p>然后查看 config/uc_config.php 文件，发现我们的一句话已经写入了：<br><img src="截图 2017-10-01 23时38分00秒.jpg" alt="截图 2017-10-01 23时38分00秒"></p>
+<p>使用菜刀连接：<br><img src="截图 2017-10-01 23时39分13秒.jpg" alt="截图 2017-10-01 23时39分13秒"> </p>
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>最后，附上整个完整利用过程的 EXP：<br><a href="https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b" target="_blank" rel="external">https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/10/02/discuz-getshell/" data-id="cj88ygn2l002dqfqfm34c4589" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hack/">Hack</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/21/php-composer/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">Composer 初试</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Misc/">Misc</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/PHP/" style="font-size: 16.67px;">PHP</a> <a href="/tags/Pillow/" style="font-size: 10px;">Pillow</a> <a href="/tags/Python/" style="font-size: 20px;">Python</a> <a href="/tags/TensorFlow/" style="font-size: 10px;">TensorFlow</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/arrow/" style="font-size: 10px;">arrow</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hostname/" style="font-size: 10px;">hostname</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/logging/" style="font-size: 10px;">logging</a> <a href="/tags/plantuml/" style="font-size: 10px;">plantuml</a> <a href="/tags/requests/" style="font-size: 10px;">requests</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/super/" style="font-size: 10px;">super</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/协程/" style="font-size: 10px;">协程</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/同源策略/" style="font-size: 10px;">同源策略</a> <a href="/tags/时间/" style="font-size: 10px;">时间</a> <a href="/tags/时间处理/" style="font-size: 10px;">时间处理</a> <a href="/tags/设计模式/" style="font-size: 13.33px;">设计模式</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/j178" target="_blank">GitHub</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 johnj<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+</div>
+</body>
+</html>

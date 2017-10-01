@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://fafe.me/"/>
-  <updated>2017-01-20T16:21:36.000Z</updated>
+  <updated>2017-10-01T16:24:35.738Z</updated>
   <id>https://fafe.me/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Discuz X 3.4 由任意文件删除到 Getshell</title>
+    <link href="https://fafe.me/2017/10/02/discuz-getshell/"/>
+    <id>https://fafe.me/2017/10/02/discuz-getshell/</id>
+    <published>2017-10-01T16:14:34.000Z</published>
+    <updated>2017-10-01T16:24:35.738Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h2><p>先下载官方托管在码云上的 Discuz X 源码：</p><figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> https://gitee.com/ComsenzDiscuz/DiscuzX.git</div></pre></td></tr></table></figure><p>查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑：<br><img src="截图 2017-10-01 21时29分18秒.jpg" alt="截图 2017-10-01 21时29分18秒"></p><p>查看其具体内容：<br><img src="截图 2017-10-01 21时31分17秒.jpg" alt="截图 2017-10-01 21时31分17秒"></p><p>它删除了5个 unlink 语句……</p><p>这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。</p><h2 id="任意文件删除"><a href="#任意文件删除" class="headerlink" title="任意文件删除"></a>任意文件删除</h2><p>这部分的分析请参考这里：<a href="https://paper.seebug.org/411/" target="_blank" rel="external">https://paper.seebug.org/411/</a> </p><p>(别吐槽——这篇文章分析得很好，省了我很多字 :haha:)</p><h2 id="文件删除能做什么"><a href="#文件删除能做什么" class="headerlink" title="文件删除能做什么"></a>文件删除能做什么</h2><p>通过上面那篇文章，想必大家都能复现文件删除的漏洞了。那么这个漏洞能做什么呢？难道只是单纯的破坏吗？</p><p>我们知道， Discuz X 这类 CMS 软件，都会一个 install 目录，用来处理用户初次安装时的配置和数据库初始化。在安装完成后，会在 data 目录下生成一个 install.lock 文件。如果尝试再次访问 /install 来安装，检测到存在 install.lock，于是提示错误：<br><img src="截图 2017-10-01 22时03分20秒.jpg" alt="截图 2017-10-01 22时03分20秒"></p><p>如果用户没有删除 install 目录，而且我们也可以利用文件删除漏洞的话，我们就可以删掉这个 instal.lock，然后重新安装 Discuz。而重装过程中一般都有写配置文件的步骤，可能会给我们写入一句话的机会。</p><h2 id="分析重装过程"><a href="#分析重装过程" class="headerlink" title="分析重装过程"></a>分析重装过程</h2><p><code>install/index.php</code> 文件控制安装的过程，它的逻辑其实很简单。安装主要分为五个步骤：<br><img src="截图 2017-10-01 22时10分36秒.jpg" alt="截图 2017-10-01 22时10分36秒"></p><ol><li>show_license 显示是否接受协议，同意后跳到 env_check</li><li>env_check 检查目录是否可写和 PHP的相关检测，然后跳到 app_reg</li><li>app_reg 提示是否安装 UCenter Server，POST 到  app_reg，如果 install_ucenter=yes，直接重定向至 db_init，否则显示配置 ucenter 的表单</li><li>db_init 要求填写数据库和网站信息，POST 到 db_init，这时会进行数据库连接和数据表的检查。所以填写的数据库地址等信息要求必须是目标站能够连接的真实的服务器。</li><li>….</li></ol><p>在 db_init 的处理逻辑里，我们看到了想要的：<br><img src="截图 2017-10-01 22时59分56秒.jpg" alt="截图 2017-10-01 22时59分56秒"></p><p>跟进 save_config_file 函数：<br><img src="截图 2017-10-01 23时11分59秒.jpg" alt="截图 2017-10-01 23时11分59秒"></p><p>继续跟进  getvars 函数：<img src="截图 2017-10-01 23时14分11秒.jpg" alt="截图 2017-10-01 23时14分11秒"><br>结果却让人失望，这里的 addcslashes 会转义我们的引号，导致一句话无法逃逸出引号，无法执行。</p><p>但是紧跟着的 install_uc_server 让我很开心：<br><img src="截图 2017-10-01 23时05分25秒.jpg" alt="截图 2017-10-01 23时05分25秒"></p><p>跟进 install_uc_server:<br><img src="截图 2017-10-01 23时19分06秒.jpg" alt="截图 2017-10-01 23时19分06秒"></p><p>发现它没有对传入的参数做任何过滤，传入了 save_uc_config 中:<br><img src="截图 2017-10-01 23时20分58秒.jpg" alt="截图 2017-10-01 23时20分58秒"><br>同样 save_uc_config 也没有做任何处理，直接拼接到配置文件字符串中，然后写入了文件。</p><p>因为 dbhost, dbuser 等参数需要用来连接数据库，所以我们能利用的就只有 tablepre 了，也就是我们指定的数据库前缀。我们构造这样的 tablepre:</p><pre><code>x&apos;);@eval($_POST[pwd]);(&apos;</code></pre><p>实验一下：</p><p><img src="截图 2017-10-01 23时27分59秒.jpg" alt="截图 2017-10-01 23时27分59秒"></p><p>然后查看 config/uc_config.php 文件，发现我们的一句话已经写入了：<br><img src="截图 2017-10-01 23时38分00秒.jpg" alt="截图 2017-10-01 23时38分00秒"></p><p>使用菜刀连接：<br><img src="截图 2017-10-01 23时39分13秒.jpg" alt="截图 2017-10-01 23时39分13秒"> </p><h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>最后，附上整个完整利用过程的 EXP：<br><a href="https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b" target="_blank" rel="external">https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b</a></p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;h2 id=&quot;初步分析&quot;&gt;&lt;a href=&quot;#初步分析&quot; class=&quot;headerlink&quot; title=&quot;初步分析&quot;&gt;&lt;/a&gt;初步分析&lt;/h2&gt;&lt;p&gt;先下载官方托管在码云上的 Discuz X 源码：&lt;/p&gt;
+&lt;figure class=&quot;highlight sh&quot;&gt;&lt;ta
+      
+    
+    </summary>
+    
+    
+      <category term="Hack" scheme="https://fafe.me/tags/Hack/"/>
+    
+  </entry>
   
   <entry>
     <title>Composer 初试</title>
@@ -522,72 +546,6 @@
       <category term="java" scheme="https://fafe.me/tags/java/"/>
     
       <category term="适配器模式" scheme="https://fafe.me/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>设计模式(一): 原型模式</title>
-    <link href="https://fafe.me/2016/09/29/prototype-pattern/"/>
-    <id>https://fafe.me/2016/09/29/prototype-pattern/</id>
-    <published>2016-09-29T03:19:46.000Z</published>
-    <updated>2017-01-20T16:16:22.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Java-回顾"><a href="#Java-回顾" class="headerlink" title="Java 回顾"></a>Java 回顾</h2><h3 id="Java-访问权限控制"><a href="#Java-访问权限控制" class="headerlink" title="Java 访问权限控制"></a>Java 访问权限控制</h3><table><thead><tr><th style="text-align:center">作用域</th><th style="text-align:center">当前类</th><th style="text-align:center">同一 package</th><th style="text-align:center">子类</th><th style="text-align:center">其他 package</th></tr></thead><tbody><tr><td style="text-align:center"><code>public</code></td><td style="text-align:center">✔</td><td style="text-align:center">✔</td><td style="text-align:center">✔</td><td style="text-align:center">✔</td></tr><tr><td style="text-align:center"><code>protected</code></td><td style="text-align:center">✔</td><td style="text-align:center">✔</td><td style="text-align:center">✔</td><td style="text-align:center"></td></tr><tr><td style="text-align:center"><code>包作用域</code> (默认)</td><td style="text-align:center">✔</td><td style="text-align:center">✔</td><td style="text-align:center"></td><td style="text-align:center"></td></tr><tr><td style="text-align:center"><code>private</code></td><td style="text-align:center">✔</td><td style="text-align:center"></td><td style="text-align:center"></td></tr></tbody></table><h3 id="方法覆盖-Method-Override"><a href="#方法覆盖-Method-Override" class="headerlink" title="方法覆盖 Method Override"></a>方法覆盖 Method Override</h3><p>方法覆盖中有一些必须要满足的条件, 这些条件基本都是为了保证多态的有效性, 或者说为了符合 <a href="https://en.wikipedia.org/wiki/Liskov_substitution_principle" target="_blank" rel="external">里氏替换原则</a>.<br><a id="more"></a></p><ol><li>子类方法的返回类型可以是父类方法的返回类型的子类.<blockquote><p>Return types may vary among methods that override each other if the return types are reference types. The notion of return-type-substitutability supports covariant returns, that is, the specialization of the return type to a subtype.</p></blockquote></li><li>子类方法不可以比父类方法抛出更多的 checked 异常, 但可以抛出父类方法抛出异常的子类.<br>可以抛出更少的异常, 但无法引入新的异常. 但是抛出 unchecked 异常却不受限制.</li></ol><h2 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h2><p>原型模式是一个创建型模式</p><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>通过给出一个原型对象来指明所要创建的对象的类型，然后用复制这个原型对象的办法创建出更多同类型的对象。</p><h3 id="使用的原因"><a href="#使用的原因" class="headerlink" title="使用的原因"></a>使用的原因</h3><ul><li>某些对象可能有复杂的内部结构</li><li>某些对象可能很难或者无法创建</li><li>某些对象可能有很复杂的初始窗台</li></ul><h3 id="Java-中-clone-的问题"><a href="#Java-中-clone-的问题" class="headerlink" title="Java 中 clone 的问题"></a>Java 中 clone 的问题</h3><p><code>cloneable</code> 是一个标识接口, 不含任何方法.</p><p><code>clone()</code> 方法在 <code>java.lang.Object</code> 中定义, 因此所有对象都有 <code>clone()</code> 方法, 但是要使用 <strong><code>clone()</code> 的类或者其父类</strong>必须实现 <code>cloneable</code> 接口才能调用, 否则会抛出 <code>CloneNotSupportedException</code>.</p><p>使用 Java 提供的克隆机制, <code>Object</code> 类相当于抽象的原型类, 每个实现 <code>Clone()</code> 方法的子类都是具体的原型类, <code>clone()</code> 作为原型方法.</p><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">native</span> Object <span class="title">clone</span><span class="params">()</span> <span class="keyword">throws</span> CloneNotSupportedException</span>;</div></pre></td></tr></table></figure><p>因为 <code>Object</code> 中 <code>clone()</code> 的定义为 <code>protected</code> , 要想使用 <code>clone()</code> 就必须<strong>自己或者父类覆盖 <code>clone()</code> </strong>, 把访问权限覆盖为 <code>public</code>.</p><p>由于 <code>clone()</code> 是一种 native实现, JNI(Java Native Interface), 所以程序员无法自己实现 <code>clone()</code> 方法, 只能调用父类的: <code>super.clone()</code> .</p><p>抽象的引用(接口而不是抽象类) 无法调用 <code>clone()</code> 方法, 只有具体的引用才有 <code>clone()</code> 方法, 这违反了针对抽象编程的原则 (DIP, 依赖倒转原则).</p><p>因为单例模式中必须维持一个全局唯一的对象, 所以必须(?) 覆盖 <code>clone()</code> 方法并显示地抛出 <code>CloneNotSupportedException</code> , 以防其某个父类覆盖了 <code>clone()</code>.</p><h3 id="浅拷贝与深拷贝"><a href="#浅拷贝与深拷贝" class="headerlink" title="浅拷贝与深拷贝"></a>浅拷贝与深拷贝</h3><p>Java 的提供克隆机制只是 shallow copy</p><h3 id="浅拷贝"><a href="#浅拷贝" class="headerlink" title="浅拷贝"></a>浅拷贝</h3><p>新的对象中的引用类型属性也跟原来的对象一样, 即指向的是同一个对象, 这样的拷贝只拷贝了第一层, 所以叫做浅拷贝.</p><h3 id="深拷贝"><a href="#深拷贝" class="headerlink" title="深拷贝"></a>深拷贝</h3><p>深拷贝不仅仅为原始类型生成新的副本, 而且所有的引用类型属性也都新创建一份. 新的对象中的引用属性的值与原来的对象不同.</p><p>深拷贝与 <code>final</code> 属性不兼容, 深拷贝实际上相当于一个没有参数的构造函数, 在实例化一个对象的时候 <code>final</code>属性都已经被赋值了, 就无法再次赋值了, 所以无法深拷贝.</p><h3 id="通过序列化和反序列化实现深拷贝"><a href="#通过序列化和反序列化实现深拷贝" class="headerlink" title="通过序列化和反序列化实现深拷贝"></a>通过序列化和反序列化实现深拷贝</h3><p>要保证将要序列化的对象的所有属性都实现了 <code>Serializable</code> 接口</p><p>使用 <code>ObjectOutputStream</code> 将对象序列化到流中, 然后从 <code>ObjectInputStream</code> 中读取并强制转型为传入时的对象.</p><p>序列化的开销非常大, 比 <code>clone()</code> 方法要慢数百倍.</p>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;Java-回顾&quot;&gt;&lt;a href=&quot;#Java-回顾&quot; class=&quot;headerlink&quot; title=&quot;Java 回顾&quot;&gt;&lt;/a&gt;Java 回顾&lt;/h2&gt;&lt;h3 id=&quot;Java-访问权限控制&quot;&gt;&lt;a href=&quot;#Java-访问权限控制&quot; class=&quot;headerlink&quot; title=&quot;Java 访问权限控制&quot;&gt;&lt;/a&gt;Java 访问权限控制&lt;/h3&gt;&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th style=&quot;text-align:center&quot;&gt;作用域&lt;/th&gt;
-&lt;th style=&quot;text-align:center&quot;&gt;当前类&lt;/th&gt;
-&lt;th style=&quot;text-align:center&quot;&gt;同一 package&lt;/th&gt;
-&lt;th style=&quot;text-align:center&quot;&gt;子类&lt;/th&gt;
-&lt;th style=&quot;text-align:center&quot;&gt;其他 package&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;code&gt;public&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;code&gt;protected&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;code&gt;包作用域&lt;/code&gt; (默认)&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;code&gt;private&lt;/code&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;✔&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;/td&gt;
-&lt;td style=&quot;text-align:center&quot;&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;h3 id=&quot;方法覆盖-Method-Override&quot;&gt;&lt;a href=&quot;#方法覆盖-Method-Override&quot; class=&quot;headerlink&quot; title=&quot;方法覆盖 Method Override&quot;&gt;&lt;/a&gt;方法覆盖 Method Override&lt;/h3&gt;&lt;p&gt;方法覆盖中有一些必须要满足的条件, 这些条件基本都是为了保证多态的有效性, 或者说为了符合 &lt;a href=&quot;https://en.wikipedia.org/wiki/Liskov_substitution_principle&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;里氏替换原则&lt;/a&gt;.&lt;br&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-      <category term="设计模式" scheme="https://fafe.me/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-      <category term="java" scheme="https://fafe.me/tags/java/"/>
-    
-      <category term="原型模式" scheme="https://fafe.me/tags/%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   

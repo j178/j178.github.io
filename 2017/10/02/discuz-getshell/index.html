@@ -6,13 +6,13 @@
   
   <title>Discuz X 3.4 由任意文件删除到 Getshell | 努力吧少年!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="初步分析先下载官方托管在码云上的 Discuz X 源码： 1$ git clone https://gitee.com/ComsenzDiscuz/DiscuzX.git 查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑： 查看其具体内容： 它删除了5个 unlink 语句…… 这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。 任意文件删除这部分的分析请参考这">
+  <meta name="description" content="2017年9月29日，Discuz! 修复了一个安全问题用于加强安全性，这个漏洞会导致前台用户可以导致任意删除文件漏洞。并且，配合其他漏洞可以实现 GetShell。">
 <meta name="keywords" content="Hack">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Discuz X 3.4 由任意文件删除到 Getshell">
 <meta property="og:url" content="https://fafe.me/2017/10/02/discuz-getshell/index.html">
 <meta property="og:site_name" content="努力吧少年!">
-<meta property="og:description" content="初步分析先下载官方托管在码云上的 Discuz X 源码： 1$ git clone https://gitee.com/ComsenzDiscuz/DiscuzX.git 查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑： 查看其具体内容： 它删除了5个 unlink 语句…… 这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。 任意文件删除这部分的分析请参考这">
+<meta property="og:description" content="2017年9月29日，Discuz! 修复了一个安全问题用于加强安全性，这个漏洞会导致前台用户可以导致任意删除文件漏洞。并且，配合其他漏洞可以实现 GetShell。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2021时29分18秒.jpg">
 <meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2021时31分17秒.jpg">
@@ -27,10 +27,10 @@
 <meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时27分59秒.jpg">
 <meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时38分00秒.jpg">
 <meta property="og:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2023时39分13秒.jpg">
-<meta property="og:updated_time" content="2017-10-01T16:54:47.958Z">
+<meta property="og:updated_time" content="2017-10-03T05:21:37.920Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Discuz X 3.4 由任意文件删除到 Getshell">
-<meta name="twitter:description" content="初步分析先下载官方托管在码云上的 Discuz X 源码： 1$ git clone https://gitee.com/ComsenzDiscuz/DiscuzX.git 查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑： 查看其具体内容： 它删除了5个 unlink 语句…… 这种修复方式真是简单粗暴啊… 看来我们分析的入口就在这里了。 任意文件删除这部分的分析请参考这">
+<meta name="twitter:description" content="2017年9月29日，Discuz! 修复了一个安全问题用于加强安全性，这个漏洞会导致前台用户可以导致任意删除文件漏洞。并且，配合其他漏洞可以实现 GetShell。">
 <meta name="twitter:image" content="https://fafe.me/2017/10/02/discuz-getshell/截图%202017-10-01%2021时29分18秒.jpg">
   
     <link rel="alternative" href="/atom.xml" title="努力吧少年!" type="application/atom+xml">
@@ -98,7 +98,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h2><p>先下载官方托管在码云上的 Discuz X 源码：</p>
+        <p>2017年9月29日，Discuz! 修复了一个安全问题用于加强安全性，这个漏洞会导致前台用户可以导致任意删除文件漏洞。并且，配合其他漏洞可以实现 GetShell。<a id="more"></a></p>
+<h2 id="初步分析"><a href="#初步分析" class="headerlink" title="初步分析"></a>初步分析</h2><p>先下载官方托管在码云上的 Discuz X 源码：</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ git <span class="built_in">clone</span> https://gitee.com/ComsenzDiscuz/DiscuzX.git</div></pre></td></tr></table></figure>
 <p>查看其提交历史，发现有一个『优化 加强安全性』的 commit 比较可疑：<br><img src="截图 2017-10-01 21时29分18秒.jpg" alt="&quot;优化 加强安全性&quot;"></p>
 <p>查看其具体内容：<br><img src="截图 2017-10-01 21时31分17秒.jpg" alt="&quot;修复&quot;"></p>
@@ -130,7 +131,7 @@
 <p><img src="截图 2017-10-01 23时27分59秒.jpg" alt=""></p>
 <p>然后查看 config/uc_config.php 文件，发现我们的一句话已经写入了：<br><img src="截图 2017-10-01 23时38分00秒.jpg" alt=""></p>
 <p>使用菜刀连接：<br><img src="截图 2017-10-01 23时39分13秒.jpg" alt=""> </p>
-<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>最后，附上整个利用过程的 EXP：<br><a href="https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b" target="_blank" rel="external">https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b</a></p>
+<h2 id="EXP"><a href="#EXP" class="headerlink" title="EXP"></a>EXP</h2><p>最后，附上整个利用过程的 EXP：<br><a href="https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b" target="_blank" rel="external">https://gist.github.com/j178/67f4dbd8e87cd012a7caa8752ea06e7b</a><br><strong>此漏洞危害巨大，请勿在网络上测试</strong></p>
 
       
     </div>

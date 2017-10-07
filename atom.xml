@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://fafe.me/"/>
-  <updated>2017-10-03T06:24:19.153Z</updated>
+  <updated>2017-10-07T16:38:58.742Z</updated>
   <id>https://fafe.me/</id>
   
   <author>
@@ -15,6 +15,26 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>ShadowsocksX-NG 工作原理</title>
+    <link href="https://fafe.me/2017/10/07/shadowsocksx-ng/"/>
+    <id>https://fafe.me/2017/10/07/shadowsocksx-ng/</id>
+    <published>2017-10-07T15:43:49.000Z</published>
+    <updated>2017-10-07T16:38:58.742Z</updated>
+    
+    <content type="html"><![CDATA[<p>ShadowsocksX-NG 是官方支持的 macOS 下的 shadowsocks 客户端，支持诸多 shadowsocks 协议的特性，今天我们来分析一下它的工作原理。<a id="more"></a></p><p>先看一下 ShadowsocksX-NG.app 中的内容，首先注意的是几个脚本：<br><img src="2.png" alt=""> <img src="3.png" alt=""></p><p>install 脚本是将相应的二进制文件复制到相应的目录中，start 脚本 是通过 <code>launchctl</code> 命令 load 相应的 plist 文件， stop 脚本是 unload 相应的 plist 文件。</p><p>其实 ShadowsocksX-NG 只是 Swift 写的一个 GUI 而已，主要的代理程序还是直接使用了 shadowsocks-libev 编译好的 ss-local 程序。ss-local 启动后监听在 1080 端口，接受 socks 协议的请求。</p><p>对于 http 协议的代理，则是集成了 privoxy 程序，监听在 1087 端口，然后转发到 1080 端口上，实现对 http 协议的代理。</p><p>另外还有集成了一个 kcptun，不过好像没有启动。</p><p>还有一个 pac server，监听在 1089 端口，用来给系统代理提供 PAC 文件，比如系统的网络配置中的 Proxy Configuration File:<br> <img src="1.png" alt=""></p><p>这样使用系统代理的程序就可以自觉地访问本地的 1080 端口，省去了手动配置的操作。<br>ShadowsocksX-NG 也提供了 Manaul Mode，在此模式下，不会设置系统代理，所有的应用都需要手动配置。</p><p>所以 ShadowsocksX-NG 只是做了这么几个工作而已：</p><ol><li>集合 ss-local, privoxy 和 kcptun</li><li>提供配置界面</li><li>提供系统代理配置</li><li>提供开机自启，PAC 文件更新</li></ol>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;ShadowsocksX-NG 是官方支持的 macOS 下的 shadowsocks 客户端，支持诸多 shadowsocks 协议的特性，今天我们来分析一下它的工作原理。
+    
+    </summary>
+    
+    
+      <category term="app" scheme="https://fafe.me/tags/app/"/>
+    
+  </entry>
   
   <entry>
     <title>Discuz X 3.4 由任意文件删除到 Getshell</title>
@@ -514,34 +534,6 @@
       <category term="Python" scheme="https://fafe.me/tags/Python/"/>
     
       <category term="requests" scheme="https://fafe.me/tags/requests/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>设计模式(三): 适配器模式</title>
-    <link href="https://fafe.me/2016/09/29/adapter-pattern/"/>
-    <id>https://fafe.me/2016/09/29/adapter-pattern/</id>
-    <published>2016-09-29T13:18:06.000Z</published>
-    <updated>2017-09-15T09:11:50.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Java-回顾"><a href="#Java-回顾" class="headerlink" title="Java 回顾"></a>Java 回顾</h2><ul><li><code>String</code> 内部实现是一个 <code>char</code> 数组</li><li><code>String</code> 可以由<code>char[]</code> ,<code>int[]</code>, <code>byte[]</code> 生成, 其中<code>char</code>代表每一个字符, <code>int</code>代表一个<code>code point</code>, <code>byte</code> 需要根据相应的 <code>charset</code> 解码为<code>char</code>  <a id="more"></a><h2 id="要点"><a href="#要点" class="headerlink" title="要点"></a>要点</h2></li></ul><ol><li>新旧两个接口</li><li>实现旧接口的对象无法在支持新接口的设备上使用</li><li>新建一个转换器(adapter), 实现新的接口, 内部聚合一个旧接口的对象, 将对新接口的所有调用全部委托到旧的接口上去.</li></ol><h2 id="讲课内容"><a href="#讲课内容" class="headerlink" title="讲课内容"></a>讲课内容</h2><ul><li>DIP 接口由高层定义, 低层实现</li><li>类适配器, 使用继承, 只能适配一个类</li><li>对象适配器, 使用聚合</li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h2 id=&quot;Java-回顾&quot;&gt;&lt;a href=&quot;#Java-回顾&quot; class=&quot;headerlink&quot; title=&quot;Java 回顾&quot;&gt;&lt;/a&gt;Java 回顾&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;String&lt;/code&gt; 内部实现是一个 &lt;code&gt;char&lt;/code&gt; 数组&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;String&lt;/code&gt; 可以由&lt;code&gt;char[]&lt;/code&gt; ,&lt;code&gt;int[]&lt;/code&gt;, &lt;code&gt;byte[]&lt;/code&gt; 生成, 其中&lt;code&gt;char&lt;/code&gt;代表每一个字符, &lt;code&gt;int&lt;/code&gt;代表一个&lt;code&gt;code point&lt;/code&gt;, &lt;code&gt;byte&lt;/code&gt; 需要根据相应的 &lt;code&gt;charset&lt;/code&gt; 解码为&lt;code&gt;char&lt;/code&gt;
-    
-    </summary>
-    
-      <category term="编程" scheme="https://fafe.me/categories/%E7%BC%96%E7%A8%8B/"/>
-    
-    
-      <category term="设计模式" scheme="https://fafe.me/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/"/>
-    
-      <category term="java" scheme="https://fafe.me/tags/java/"/>
-    
-      <category term="适配器模式" scheme="https://fafe.me/tags/%E9%80%82%E9%85%8D%E5%99%A8%E6%A8%A1%E5%BC%8F/"/>
     
   </entry>
   

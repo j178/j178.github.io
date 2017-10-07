@@ -4,18 +4,24 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2016/12 | 努力吧少年!</title>
+  <title>ShadowsocksX-NG 工作原理 | 努力吧少年!</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Life learner">
-<meta property="og:type" content="website">
-<meta property="og:title" content="努力吧少年!">
-<meta property="og:url" content="https://fafe.me/archives/2016/12/index.html">
+  <meta name="description" content="ShadowsocksX-NG 是官方支持的 macOS 下的 shadowsocks 客户端，支持诸多 shadowsocks 协议的特性，今天我们来分析一下它的工作原理。">
+<meta name="keywords" content="app">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ShadowsocksX-NG 工作原理">
+<meta property="og:url" content="https://fafe.me/2017/10/07/shadowsocksx-ng/index.html">
 <meta property="og:site_name" content="努力吧少年!">
-<meta property="og:description" content="Life learner">
+<meta property="og:description" content="ShadowsocksX-NG 是官方支持的 macOS 下的 shadowsocks 客户端，支持诸多 shadowsocks 协议的特性，今天我们来分析一下它的工作原理。">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://fafe.me/2017/10/07/shadowsocksx-ng/2.png">
+<meta property="og:image" content="https://fafe.me/2017/10/07/shadowsocksx-ng/3.png">
+<meta property="og:image" content="https://fafe.me/2017/10/07/shadowsocksx-ng/1.png">
+<meta property="og:updated_time" content="2017-10-07T16:38:58.742Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="努力吧少年!">
-<meta name="twitter:description" content="Life learner">
+<meta name="twitter:title" content="ShadowsocksX-NG 工作原理">
+<meta name="twitter:description" content="ShadowsocksX-NG 是官方支持的 macOS 下的 shadowsocks 客户端，支持诸多 shadowsocks 协议的特性，今天我们来分析一下它的工作原理。">
+<meta name="twitter:image" content="https://fafe.me/2017/10/07/shadowsocksx-ng/2.png">
   
     <link rel="alternative" href="/atom.xml" title="努力吧少年!" type="application/atom+xml">
   
@@ -73,115 +79,72 @@ ga('send', 'pageview');
   </div>
 </header>
     <div class="outer">
-      <section id="main">
-  
-  
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/12/30/python-logging/" class="archive-article-date">
-  <time datetime="2016-12-30T04:23:23.000Z" itemprop="datePublished">12月 30</time>
+      <section id="main"><article id="post-shadowsocksx-ng" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/07/shadowsocksx-ng/" class="article-date">
+  <time datetime="2017-10-07T15:43:49.000Z" itemprop="datePublished">2017-10-07</time>
 </a>
-      
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/30/python-logging/">Python logging 基础</a>
+    <h1 class="article-title" itemprop="name">
+      ShadowsocksX-NG 工作原理
     </h1>
   
 
-    </header>
-  </div>
-</article>
-  
+      </header>
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/12/25/python-corroutine/" class="archive-article-date">
-  <time datetime="2016-12-24T16:53:26.000Z" itemprop="datePublished">12月 25</time>
-</a>
+    <div class="article-entry" itemprop="articleBody">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/25/python-corroutine/">Python 协程基础</a>
-    </h1>
-  
+        <p>ShadowsocksX-NG 是官方支持的 macOS 下的 shadowsocks 客户端，支持诸多 shadowsocks 协议的特性，今天我们来分析一下它的工作原理。<a id="more"></a></p>
+<p>先看一下 ShadowsocksX-NG.app 中的内容，首先注意的是几个脚本：<br><img src="2.png" alt=""> <img src="3.png" alt=""></p>
+<p>install 脚本是将相应的二进制文件复制到相应的目录中，start 脚本 是通过 <code>launchctl</code> 命令 load 相应的 plist 文件， stop 脚本是 unload 相应的 plist 文件。</p>
+<p>其实 ShadowsocksX-NG 只是 Swift 写的一个 GUI 而已，主要的代理程序还是直接使用了 shadowsocks-libev 编译好的 ss-local 程序。ss-local 启动后监听在 1080 端口，接受 socks 协议的请求。</p>
+<p>对于 http 协议的代理，则是集成了 privoxy 程序，监听在 1087 端口，然后转发到 1080 端口上，实现对 http 协议的代理。</p>
+<p>另外还有集成了一个 kcptun，不过好像没有启动。</p>
+<p>还有一个 pac server，监听在 1089 端口，用来给系统代理提供 PAC 文件，比如系统的网络配置中的 Proxy Configuration File:<br> <img src="1.png" alt=""></p>
+<p>这样使用系统代理的程序就可以自觉地访问本地的 1080 端口，省去了手动配置的操作。<br>ShadowsocksX-NG 也提供了 Manaul Mode，在此模式下，不会设置系统代理，所有的应用都需要手动配置。</p>
+<p>所以 ShadowsocksX-NG 只是做了这么几个工作而已：</p>
+<ol>
+<li>集合 ss-local, privoxy 和 kcptun</li>
+<li>提供配置界面</li>
+<li>提供系统代理配置</li>
+<li>提供开机自启，PAC 文件更新</li>
+</ol>
 
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/12/18/jupyter-notebook/" class="archive-article-date">
-  <time datetime="2016-12-17T18:39:56.000Z" itemprop="datePublished">12月 18</time>
-</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/18/jupyter-notebook/">Jupyter Notebook 初试</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/12/03/shell-basic/" class="archive-article-date">
-  <time datetime="2016-12-03T15:45:38.000Z" itemprop="datePublished">12月 3</time>
-</a>
+    </div>
+    <footer class="article-footer">
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/03/shell-basic/">Shell 基础</a>
-    </h1>
-  
-
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      <a href="/2016/12/02/linux-runlevel/" class="archive-article-date">
-  <time datetime="2016-12-01T20:27:13.000Z" itemprop="datePublished">12月 2</time>
-</a>
+        <a data-url="https://fafe.me/2017/10/07/shadowsocksx-ng/" data-id="cj8hjfmu6002iz1qfpde5zz92" class="article-share-link">分享到</a>
       
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/02/linux-runlevel/">Linux 中的 runlevel</a>
-    </h1>
-  
 
-    </header>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/app/">app</a></li></ul>
+
+    </footer>
   </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/10/02/discuz-getshell/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">Discuz X 3.4 由任意文件删除到 Getshell</div>
+    </a>
+  
+</nav>
+
+  
 </article>
-  
-  
-    </div></section>
-  
 
 </section>
       

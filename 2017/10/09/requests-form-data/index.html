@@ -1,0 +1,234 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>requests 如何编码 multipart/form-data | 努力吧少年!</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="requests 是用 python 处理 HTTP 请求时毋庸置疑的第一选择，其中的一个原因就是它简洁的 API 接口。那么这些接口下面隐藏的是什么样的东东呢，今天我们来分析一下 requests 是如何处理 multipart/form-data 格式的请求的。">
+<meta name="keywords" content="requests,multipart,form-data">
+<meta property="og:type" content="article">
+<meta property="og:title" content="requests 如何编码 multipart&#x2F;form-data">
+<meta property="og:url" content="https://fafe.me/2017/10/09/requests-form-data/index.html">
+<meta property="og:site_name" content="努力吧少年!">
+<meta property="og:description" content="requests 是用 python 处理 HTTP 请求时毋庸置疑的第一选择，其中的一个原因就是它简洁的 API 接口。那么这些接口下面隐藏的是什么样的东东呢，今天我们来分析一下 requests 是如何处理 multipart/form-data 格式的请求的。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-10-09T11:50:12.238Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="requests 如何编码 multipart&#x2F;form-data">
+<meta name="twitter:description" content="requests 是用 python 处理 HTTP 请求时毋庸置疑的第一选择，其中的一个原因就是它简洁的 API 接口。那么这些接口下面隐藏的是什么样的东东呢，今天我们来分析一下 requests 是如何处理 multipart/form-data 格式的请求的。">
+  
+    <link rel="alternative" href="/atom.xml" title="努力吧少年!" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.ico">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-91646414-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
+</head>
+<body>
+<div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">努力吧少年!</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">What hurts more, the pain of hard work or the pain of regret?</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+      </nav>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-requests-form-data" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/10/09/requests-form-data/" class="article-date">
+  <time datetime="2017-10-09T11:37:13.000Z" itemprop="datePublished">2017-10-09</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      requests 如何编码 multipart/form-data
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>requests 是用 python 处理 HTTP 请求时毋庸置疑的第一选择，其中的一个原因就是它简洁的 API 接口。那么这些接口下面隐藏的是什么样的东东呢，今天我们来分析一下 requests 是如何处理 multipart/form-data 格式的请求的。<a id="more"></a></p>
+<h2 id="multipart-form-data-编码格式"><a href="#multipart-form-data-编码格式" class="headerlink" title="multipart/form-data 编码格式"></a>multipart/form-data 编码格式</h2><p>废话少说，我也懒得介绍 multipart/form-data 是啥了。先抓包看一下浏览器在 form 表单的 <code>enctype=&quot;multipart/form-data</code> 时，构造的 POST 请求时什么样。</p>
+<p>分析一下，基本的格式长这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">POST / HTTP/1.1[换行]</div><div class="line">Host: localhost[换行]</div><div class="line">Content-Type: multipart/form-data; boundary=boundary[换行]</div><div class="line">[换行]</div><div class="line">--boundary[换行]</div><div class="line">Content-Disposition: form-data; name=&quot;参数名&quot;[换行] </div><div class="line">[换行]</div><div class="line">内容[换行]</div><div class="line">--boundary[换行]</div><div class="line">Content-Disposition: form-data; name=&quot;图片名&quot;; filename=&quot;图片文件名&quot;[换行]</div><div class="line">Content-Type: 类型[换行]</div><div class="line">[换行]</div><div class="line">二进制内容[换行]</div><div class="line">--boundary--</div></pre></td></tr></table></figure></p>
+<p>在 Content-Disposition 中，如果有 filename 参数，则 PHP（或其他后端框架）会将此参数解析到 <code>$_FILES</code> 中。</p>
+<h2 id="requests-如何编码？"><a href="#requests-如何编码？" class="headerlink" title="requests 如何编码？"></a>requests 如何编码？</h2><figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">r = requests.post(url, data=&#123;<span class="string">'data'</span>: <span class="string">'d'</span>&#125;, files=&#123;<span class="string">'files'</span>: <span class="string">'1'</span>&#125;)</div></pre></td></tr></table></figure>
+<p>当提供了 files 参数时，requests 也会将 data 做 multipart/form-data 编码，但是不添加 filename 参数，所以后端会解析到 \$_POST 中，files 参数任然解析到 \$_FILES 中。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">r = requests.port(url, files=&#123;<span class="string">'file'</span>: (<span class="keyword">None</span>, <span class="string">'file'</span>)&#125;)</div></pre></td></tr></table></figure>
+<p><code>files={&#39;file&#39;: (None, &#39;file&#39;)}</code> 这样将 files 参数写成二元组，第一项表示此参数的 filename 属性。这里手动置为 <code>None</code>，则表示不包含 filename 属性，所以后端会将此参数解析到 <code>$_POST</code> 中。<br>这种方式既保证了使用 multipart/form-data 编码，也不会被解析到 <code>$_FILES</code> 中，在编写 POC 时常用。</p>
+<h2 id="requests-编码分析"><a href="#requests-编码分析" class="headerlink" title="requests 编码分析"></a>requests 编码分析</h2><p>编码部分的代码在 <code>requests.models.PreparedRequest.prepare_body()</code> 中，在 <code>PreparedRequests.prepare()</code> 方法中会调用 <code>.prepare_body()</code>，生成 HTTP 请求的 body 部分：<br><figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">prepare_body</span><span class="params">(self, data, files, json=None)</span>:</span></div><div class="line">    <span class="string">"""Prepares the given HTTP body data."""</span></div><div class="line">    <span class="comment"># Check if file, fo, generator, iterator.</span></div><div class="line">    <span class="comment"># If not, run through normal process.</span></div><div class="line">    <span class="comment"># Nottin' on you.</span></div><div class="line">    body = <span class="keyword">None</span></div><div class="line">    content_type = <span class="keyword">None</span></div><div class="line">    <span class="comment"># 如果只提供了 json 参数，则使用 application/json 编码</span></div><div class="line">    <span class="keyword">if</span> <span class="keyword">not</span> data <span class="keyword">and</span> json <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">        <span class="comment"># urllib3 requires a bytes-like body. Python 2's json.dumps</span></div><div class="line">        <span class="comment"># provides this natively, but Python 3 gives a Unicode string.</span></div><div class="line">        content_type = <span class="string">'application/json'</span></div><div class="line">        body = complexjson.dumps(json)</div><div class="line">        <span class="keyword">if</span> <span class="keyword">not</span> isinstance(body, bytes):</div><div class="line">            body = body.encode(<span class="string">'utf-8'</span>)</div><div class="line">    <span class="comment"># data 是否为一个可迭代对象（是否使用 chunked 方式上传）</span></div><div class="line">    is_stream = all([</div><div class="line">        hasattr(data, <span class="string">'__iter__'</span>),</div><div class="line">        <span class="keyword">not</span> isinstance(data, (basestring, list, tuple, collections.Mapping))</div><div class="line">    ])</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        length = super_len(data)</div><div class="line">    <span class="keyword">except</span> (TypeError, AttributeError, UnsupportedOperation):</div><div class="line">        length = <span class="keyword">None</span></div><div class="line">    <span class="comment"># 使用 chunked 方式上传</span></div><div class="line">    <span class="keyword">if</span> is_stream:</div><div class="line">        body = data</div><div class="line">        <span class="keyword">if</span> getattr(body, <span class="string">'tell'</span>, <span class="keyword">None</span>) <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">            <span class="comment"># Record the current file position before reading.</span></div><div class="line">            <span class="comment"># This will allow us to rewind a file in the event</span></div><div class="line">            <span class="comment"># of a redirect.</span></div><div class="line">            <span class="keyword">try</span>:</div><div class="line">                self._body_position = body.tell()</div><div class="line">            <span class="keyword">except</span> (IOError, OSError):</div><div class="line">                <span class="comment"># This differentiates from None, allowing us to catch</span></div><div class="line">                <span class="comment"># a failed `tell()` later when trying to rewind the body</span></div><div class="line">                self._body_position = object()</div><div class="line">        <span class="keyword">if</span> files:</div><div class="line">            <span class="keyword">raise</span> NotImplementedError(<span class="string">'Streamed bodies and files are mutually exclusive.'</span>)</div><div class="line">        <span class="keyword">if</span> length:</div><div class="line">            self.headers[<span class="string">'Content-Length'</span>] = builtin_str(length)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            self.headers[<span class="string">'Transfer-Encoding'</span>] = <span class="string">'chunked'</span></div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        <span class="comment"># Multi-part file uploads.</span></div><div class="line">        <span class="comment"># 如果有 files 参数，则使用 _encode_files 方法，进行 multi-part 编码</span></div><div class="line">        <span class="keyword">if</span> files:</div><div class="line">            (body, content_type) = self._encode_files(files, data)</div><div class="line">        <span class="comment"># 否则按照 urlencoded 方式编码 data 部分</span></div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">if</span> data:</div><div class="line">                body = self._encode_params(data)</div><div class="line">                <span class="keyword">if</span> isinstance(data, basestring) <span class="keyword">or</span> hasattr(data, <span class="string">'read'</span>):</div><div class="line">                    content_type = <span class="keyword">None</span></div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    content_type = <span class="string">'application/x-www-form-urlencoded'</span></div><div class="line">        self.prepare_content_length(body)</div><div class="line">        <span class="comment"># Add content-type if it wasn't explicitly provided.</span></div><div class="line">        <span class="keyword">if</span> content_type <span class="keyword">and</span> (<span class="string">'content-type'</span> <span class="keyword">not</span> <span class="keyword">in</span> self.headers):</div><div class="line">            self.headers[<span class="string">'Content-Type'</span>] = content_type</div><div class="line">    self.body = body</div></pre></td></tr></table></figure></p>
+<p>下面看一下 <code>_encode_files()</code> 和 <code>_encode_params()</code> 方法：</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RequestEncodingMixin</span><span class="params">(object)</span>:</span></div><div class="line">    ...</div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_encode_params</span><span class="params">(data)</span>:</span></div><div class="line">        <span class="string">"""Encode parameters in a piece of data.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        Will successfully encode parameters when passed as a dict or a list of</span></div><div class="line"><span class="string">        2-tuples. Order is retained if data is a list of 2-tuples but arbitrary</span></div><div class="line"><span class="string">        if parameters are supplied as a dict.</span></div><div class="line"><span class="string">        """</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> isinstance(data, (str, bytes)):</div><div class="line">            <span class="keyword">return</span> data</div><div class="line">        <span class="keyword">elif</span> hasattr(data, <span class="string">'read'</span>):</div><div class="line">            <span class="keyword">return</span> data</div><div class="line">        <span class="keyword">elif</span> hasattr(data, <span class="string">'__iter__'</span>):</div><div class="line">            result = []</div><div class="line">            <span class="keyword">for</span> k, vs <span class="keyword">in</span> to_key_val_list(data):</div><div class="line">                <span class="keyword">if</span> isinstance(vs, basestring) <span class="keyword">or</span> <span class="keyword">not</span> hasattr(vs, <span class="string">'__iter__'</span>):</div><div class="line">                    vs = [vs]</div><div class="line">                <span class="keyword">for</span> v <span class="keyword">in</span> vs:</div><div class="line">                    <span class="keyword">if</span> v <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">                        result.append(</div><div class="line">                            (k.encode(<span class="string">'utf-8'</span>) <span class="keyword">if</span> isinstance(k, str) <span class="keyword">else</span> k,</div><div class="line">                            v.encode(<span class="string">'utf-8'</span>) <span class="keyword">if</span> isinstance(v, str) <span class="keyword">else</span> v))</div><div class="line">            <span class="comment"># 直接使用 urlencode 进行编码</span></div><div class="line">            <span class="keyword">return</span> urlencode(result, doseq=<span class="keyword">True</span>)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">return</span> data</div><div class="line"></div><div class="line"><span class="meta">    @staticmethod</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_encode_files</span><span class="params">(files, data)</span>:</span></div><div class="line">        <span class="string">"""Build the body for a multipart/form-data request.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">        Will successfully encode files when passed as a dict or a list of</span></div><div class="line"><span class="string">        tuples. Order is retained if data is a list of tuples but arbitrary</span></div><div class="line"><span class="string">        if parameters are supplied as a dict.</span></div><div class="line"><span class="string">        The tuples may be 2-tuples (filename, fileobj), 3-tuples (filename, fileobj, contentype)</span></div><div class="line"><span class="string">        or 4-tuples (filename, fileobj, contentype, custom_headers).</span></div><div class="line"><span class="string">        """</span></div><div class="line">        <span class="keyword">if</span> (<span class="keyword">not</span> files):</div><div class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Files must be provided."</span>)</div><div class="line">        <span class="keyword">elif</span> isinstance(data, basestring):</div><div class="line">            <span class="keyword">raise</span> ValueError(<span class="string">"Data must not be a string."</span>)</div><div class="line"></div><div class="line">        new_fields = []</div><div class="line">        <span class="comment"># 全部转为 [(key, val)] 的形式，统一处理</span></div><div class="line">        fields = to_key_val_list(data <span class="keyword">or</span> &#123;&#125;)</div><div class="line">        files = to_key_val_list(files <span class="keyword">or</span> &#123;&#125;)</div><div class="line"></div><div class="line">        <span class="keyword">for</span> field, val <span class="keyword">in</span> fields:</div><div class="line">            <span class="comment"># 从这里看 data 参数还接受 list of string?</span></div><div class="line">            <span class="keyword">if</span> isinstance(val, basestring) <span class="keyword">or</span> <span class="keyword">not</span> hasattr(val, <span class="string">'__iter__'</span>):</div><div class="line">                val = [val]</div><div class="line">            <span class="keyword">for</span> v <span class="keyword">in</span> val:</div><div class="line">                <span class="keyword">if</span> v <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</div><div class="line">                    <span class="comment"># Don't call str() on bytestrings: in Py3 it all goes wrong.</span></div><div class="line">                    <span class="keyword">if</span> <span class="keyword">not</span> isinstance(v, bytes):</div><div class="line">                        v = str(v)</div><div class="line"></div><div class="line">                    new_fields.append(</div><div class="line">                        (field.decode(<span class="string">'utf-8'</span>) <span class="keyword">if</span> isinstance(field, bytes) <span class="keyword">else</span> field,</div><div class="line">                        v.encode(<span class="string">'utf-8'</span>) <span class="keyword">if</span> isinstance(v, str) <span class="keyword">else</span> v))</div><div class="line"></div><div class="line">        <span class="keyword">for</span> (k, v) <span class="keyword">in</span> files:</div><div class="line">            <span class="comment"># support for explicit filename</span></div><div class="line">            ft = <span class="keyword">None</span></div><div class="line">            fh = <span class="keyword">None</span></div><div class="line">            <span class="comment"># 分别处理各种大小的元组</span></div><div class="line">            <span class="keyword">if</span> isinstance(v, (tuple, list)):</div><div class="line">                <span class="keyword">if</span> len(v) == <span class="number">2</span>:</div><div class="line">                    fn, fp = v</div><div class="line">                <span class="keyword">elif</span> len(v) == <span class="number">3</span>:</div><div class="line">                    fn, fp, ft = v</div><div class="line">                <span class="keyword">else</span>:</div><div class="line">                    fn, fp, ft, fh = v</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                <span class="comment"># 如果不是元组形式，则从 file_obj 中猜测文件名；或者直接使用内容字符串作为文件名</span></div><div class="line">                fn = guess_filename(v) <span class="keyword">or</span> k</div><div class="line">                fp = v</div><div class="line"></div><div class="line">            <span class="keyword">if</span> isinstance(fp, (str, bytes, bytearray)):</div><div class="line">                fdata = fp</div><div class="line">            <span class="keyword">else</span>:</div><div class="line">                fdata = fp.read()</div><div class="line">            <span class="comment"># 使用的 urllib3.fields.RequestFile</span></div><div class="line">            rf = RequestField(name=k, data=fdata, filename=fn, headers=fh)</div><div class="line">            rf.make_multipart(content_type=ft)</div><div class="line">            new_fields.append(rf)</div><div class="line">        <span class="comment"># 使用 urllib3.filepost 中的方法</span></div><div class="line">        body, content_type = encode_multipart_formdata(new_fields)</div><div class="line"></div><div class="line">        <span class="keyword">return</span> body, content_type</div></pre></td></tr></table></figure>
+<p>可以看到，在处理 multipart 的编码时，requests 直接使用 urllib3 提供的方法，那我们就看一下 urllib3 是如何实现的。</p>
+<figure class="highlight py"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">encode_multipart_formdata</span><span class="params">(fields, boundary=None)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Encode a dictionary of ``fields`` using the multipart/form-data MIME format.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    :param fields:</span></div><div class="line"><span class="string">        Dictionary of fields or list of (key, :class:`~urllib3.fields.RequestField`).</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    :param boundary:</span></div><div class="line"><span class="string">        If not specified, then a random boundary will be generated using</span></div><div class="line"><span class="string">        :func:`mimetools.choose_boundary`.</span></div><div class="line"><span class="string">    """</span></div><div class="line">    body = BytesIO()</div><div class="line">    <span class="keyword">if</span> boundary <span class="keyword">is</span> <span class="keyword">None</span>:</div><div class="line">        boundary = choose_boundary()</div><div class="line"></div><div class="line">    <span class="keyword">for</span> field <span class="keyword">in</span> iter_field_objects(fields):</div><div class="line">        body.write(b(<span class="string">'--%s\r\n'</span> % (boundary)))</div><div class="line"></div><div class="line">        writer(body).write(field.render_headers())</div><div class="line">        data = field.data</div><div class="line"></div><div class="line">        <span class="keyword">if</span> isinstance(data, int):</div><div class="line">            data = str(data)  <span class="comment"># Backwards compatibility</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span> isinstance(data, six.text_type):</div><div class="line">            writer(body).write(data)</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            body.write(data)</div><div class="line"></div><div class="line">        body.write(<span class="string">b'\r\n'</span>)</div><div class="line"></div><div class="line">    body.write(b(<span class="string">'--%s--\r\n'</span> % (boundary)))</div><div class="line"></div><div class="line">    content_type = str(<span class="string">'multipart/form-data; boundary=%s'</span> % boundary)</div><div class="line"></div><div class="line">    <span class="keyword">return</span> body.getvalue(), content_type</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">iter_field_objects</span><span class="params">(fields)</span>:</span></div><div class="line">    <span class="string">"""</span></div><div class="line"><span class="string">    Iterate over fields.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    Supports list of (k, v) tuples and dicts, and lists of</span></div><div class="line"><span class="string">    :class:`~urllib3.fields.RequestField`.</span></div><div class="line"><span class="string"></span></div><div class="line"><span class="string">    """</span></div><div class="line">    <span class="keyword">if</span> isinstance(fields, dict):</div><div class="line">        i = six.iteritems(fields)</div><div class="line">    <span class="keyword">else</span>:</div><div class="line">        i = iter(fields)</div><div class="line"></div><div class="line">    <span class="keyword">for</span> field <span class="keyword">in</span> i:</div><div class="line">        <span class="keyword">if</span> isinstance(field, RequestField):</div><div class="line">            <span class="keyword">yield</span> field</div><div class="line">        <span class="keyword">else</span>:</div><div class="line">            <span class="keyword">yield</span> RequestField.from_tuples(*field)</div></pre></td></tr></table></figure>
+<p>代码比较直白，就不多说啦~</p>
+<h2 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h2><p><a href="https://stackoverflow.com/questions/12385179/how-to-send-a-multipart-form-data-with-requests-in-python" target="_blank" rel="external">https://stackoverflow.com/questions/12385179/how-to-send-a-multipart-form-data-with-requests-in-python</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/10/09/requests-form-data/" data-id="cj8k3v1ma002juiqf3x8sb6c4" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/form-data/">form-data</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/multipart/">multipart</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/requests/">requests</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2017/10/07/shadowsocksx-ng/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">ShadowsocksX-NG 工作原理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Linux/">Linux</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Misc/">Misc</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/后端/">后端</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/机器学习/">机器学习</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/编程/">编程</a><span class="category-list-count">13</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/PHP/" style="font-size: 16.67px;">PHP</a> <a href="/tags/Pillow/" style="font-size: 10px;">Pillow</a> <a href="/tags/Python/" style="font-size: 20px;">Python</a> <a href="/tags/TensorFlow/" style="font-size: 10px;">TensorFlow</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/app/" style="font-size: 10px;">app</a> <a href="/tags/arrow/" style="font-size: 10px;">arrow</a> <a href="/tags/form-data/" style="font-size: 10px;">form-data</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hostname/" style="font-size: 10px;">hostname</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/logging/" style="font-size: 10px;">logging</a> <a href="/tags/multipart/" style="font-size: 10px;">multipart</a> <a href="/tags/plantuml/" style="font-size: 10px;">plantuml</a> <a href="/tags/requests/" style="font-size: 13.33px;">requests</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/super/" style="font-size: 10px;">super</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/协程/" style="font-size: 10px;">协程</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/同源策略/" style="font-size: 10px;">同源策略</a> <a href="/tags/时间/" style="font-size: 10px;">时间</a> <a href="/tags/时间处理/" style="font-size: 10px;">时间处理</a> <a href="/tags/设计模式/" style="font-size: 13.33px;">设计模式</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">链接</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="https://github.com/j178" target="_blank">GitHub</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2017 johnj<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+</div>
+</body>
+</html>

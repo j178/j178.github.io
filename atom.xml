@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://fafe.me/"/>
-  <updated>2017-10-09T11:50:12.238Z</updated>
+  <updated>2017-10-26T15:59:48.020Z</updated>
   <id>https://fafe.me/</id>
   
   <author>
@@ -15,6 +15,27 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Container With Most Water</title>
+    <link href="https://fafe.me/2017/10/26/container-with-most-water/"/>
+    <id>https://fafe.me/2017/10/26/container-with-most-water/</id>
+    <published>2017-10-26T15:36:14.000Z</published>
+    <updated>2017-10-26T15:59:48.020Z</updated>
+    
+    <content type="html"><![CDATA[<blockquote><p>Given n non-negative integers a1, a2, …, an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.<br>Note: You may not slant the container and n is at least 2.<br><a id="more"></a><br>给出的代码模板为：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxArea</span><span class="params">(self, height)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        :type height: List[int]</span></div><div class="line"><span class="string">        :rtype: int</span></div><div class="line"><span class="string">        """</span></div></pre></td></tr></table></figure></p></blockquote><p>这道题要求两条竖线组成的区域的面积最大，这就需要两条竖线间的距离尽可能远，且短的那条线要尽可能长(好像有点绕口…)，所以面积公式为：</p><p><code>area = min(height[i], height[j]) * (j - i) 其中 i, j 为横坐标，且 i &lt; j.</code></p><p>因为 height 数组中的值是随机的，我们无法控制 <code>min(height[i]</code>, <code>height[j])</code> 部分。但我们可以先让 <code>j - i</code> 最大，然后再根据 <code>height[i]</code> 和 <code>height[j]</code> 的情况相应调整 <code>i</code> 和 <code>j</code>.</p><p>所以我们先用两个指针，<code>i</code> 和 <code>j</code>，分别指向数组的头和尾。如果此时<code>height[0] &lt; height[-1]</code>，则将 <code>i</code> 向右移。因为此时矩形的宽最大，也就是说此时的矩形说 height[0] 能够形成的最大的矩形，所以也没必要再计算 <code>height[0]</code> 与 <code>heigh[1:-1]</code> 这些竖线组成的面积了，直接将 <code>i</code> 右移。</p><p>同样的，如果 <code>height[0] &gt; height[-1]</code>，则将 <code>j</code> 左移。</p><p>最终可以写成这样代码：</p><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">maxArea</span><span class="params">(self, height)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line"><span class="string">        :type height: List[int]</span></div><div class="line"><span class="string">        :rtype: int</span></div><div class="line"><span class="string">        """</span></div><div class="line">        i = <span class="number">0</span></div><div class="line">        j = len(height) - <span class="number">1</span></div><div class="line">        max_area = <span class="number">0</span></div><div class="line">        <span class="keyword">while</span> i &lt; j:</div><div class="line">          max_area = max(max_area, min(height[i], height[j]) * (j - i))</div><div class="line">          <span class="keyword">if</span> height[i] &lt; height[j]:</div><div class="line">            i += <span class="number">1</span></div><div class="line">          <span class="keyword">else</span>:</div><div class="line">            j += <span class="number">1</span></div><div class="line">        <span class="keyword">return</span> max_area</div></pre></td></tr></table></figure>]]></content>
+    
+    <summary type="html">
+    
+      &lt;blockquote&gt;
+&lt;p&gt;Given n non-negative integers a1, a2, …, an, where each represents a point at coordinate (i, ai). n vertical lines are drawn such that the two endpoints of line i is at (i, ai) and (i, 0). Find two lines, which together with x-axis forms a container, such that the container contains the most water.&lt;br&gt;Note: You may not slant the container and n is at least 2.&lt;br&gt;
+    
+    </summary>
+    
+    
+      <category term="leetcode" scheme="https://fafe.me/tags/leetcode/"/>
+    
+  </entry>
   
   <entry>
     <title>requests 如何编码 multipart/form-data</title>
@@ -502,36 +523,6 @@
       <category term="arrow" scheme="https://fafe.me/tags/arrow/"/>
     
       <category term="时间" scheme="https://fafe.me/tags/%E6%97%B6%E9%97%B4/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>PlantUML: 用程序员的方式画图</title>
-    <link href="https://fafe.me/2016/10/01/hexo-plantuml/"/>
-    <id>https://fafe.me/2016/10/01/hexo-plantuml/</id>
-    <published>2016-10-01T05:31:03.000Z</published>
-    <updated>2017-01-20T16:16:52.000Z</updated>
-    
-    <content type="html"><![CDATA[<h3 id="PlantUML-简介"><a href="#PlantUML-简介" class="headerlink" title="PlantUML 简介"></a>PlantUML 简介</h3><p>PlantUML 是一个画图脚本语言，用它可以快速地画出：</p><ul><li>时序图</li><li>流程图</li><li>用例图</li><li>状态图</li><li>组件图<a id="more"></a></li></ul><p>PlantUML 本体是一个 <code>plantuml.jar</code>文件, 依赖于 <a href="http://www.graphviz.org/" target="_blank" rel="external">graphviz</a>.</p><p>graphviz 是一个开源的图片渲染库, 安装了这个库才能在 Windows 下把脚本转换为图片(sequence diagram 和 activity beta diagrams 可以不需要).</p><p><a href="http://www.graphviz.org/Download_windows.php" target="_blank" rel="external">下载</a> graphviz之后, 设置<code>GRAPHVIZ_DOT</code>环境变量为<code>path/to/graphviz/release/dot.exe</code>, 使 plantuml 能够找到 <code>dot.exe</code>, 然后使用<code>java -jar ./plantuml.jar -testdot</code> 测试配置是否成功.</p><p>配置完成之后, 新建文件, 在其中写入简单的 Demo:</p><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">@startuml</div><div class="line">Alice -&gt; Bob: test</div><div class="line">@enduml</div></pre></td></tr></table></figure><p>然后执行命令 <code>java -jar plantuml.jar demo.txt</code> 即可生成图片. 也可以直接双击 <code>plantuml.jar</code>文件打开GUI窗口来操作.</p><p>PlantUML 几乎可以集成到任何编辑器/IDE/文档工具中, 比如 Sublime Text 中有 <a href="https://github.com/jvantuyl/sublime_diagram_plugin" target="_blank" rel="external">PlantUML for Sublime</a> ,  Intellij IDEA , Eclipse, Chrome 中都有相应的插件.在<a href="http://plantuml.com/running" target="_blank" rel="external">这里</a>查看如何在你当前的使用的软件中集成 PlantUML.</p><h3 id="在-Hexo-中使用-PlantUML"><a href="#在-Hexo-中使用-PlantUML" class="headerlink" title="在 Hexo 中使用 PlantUML"></a>在 Hexo 中使用 PlantUML</h3><p>Typora 自带支持 <code>sequence</code>, <code>flow chart</code> 等画图工具, 但 Hexo 自身的 Markdown 解析器不支持, 所以需要安装相应的 tag 插件.</p><p><code>hexo-tag-plantuml</code> 插件的语法与 Typora 自带的 sequence 语法相似, 看上去都很简洁. 使用<code>npm install hexo-tag-plantuml --save</code> 安装之后, <strong>不用修改任何_config.yml配置</strong>, 直接在 Markdown 文件中使用 {% plantuml %} {% endplantuml %}  标签就可以了.</p><blockquote><p>这里不太明白的就是 Hexo 的插件机制, 不知道插件如何才能起作用:question:</p></blockquote><p><code>hexo-tag-plantuml</code> 其实使用的是 PlantUML 提供的<a href="http://www.plantuml.com/plantuml/" target="_blank" rel="external">在线服务</a>, 只是简单地将标签包裹的代码传给服务器, 获取生成的链接, 生成 <code>img</code>标签替换原来的代码区域.</p><h3 id="PlantUML-语法"><a href="#PlantUML-语法" class="headerlink" title="PlantUML 语法"></a>PlantUML 语法</h3><p>TODO</p><h3 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h3><ul><li><a href="http://plantuml.com/PlantUML_Language_Reference_Guide.pdf" target="_blank" rel="external">PlanUML 官方文档</a> </li></ul><ul><li><a href="http://www.jianshu.com/p/e92a52770832" target="_blank" rel="external">使用 Sublime + PlantUML 高效地画图</a></li></ul>]]></content>
-    
-    <summary type="html">
-    
-      &lt;h3 id=&quot;PlantUML-简介&quot;&gt;&lt;a href=&quot;#PlantUML-简介&quot; class=&quot;headerlink&quot; title=&quot;PlantUML 简介&quot;&gt;&lt;/a&gt;PlantUML 简介&lt;/h3&gt;&lt;p&gt;PlantUML 是一个画图脚本语言，用它可以快速地画出：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;时序图&lt;/li&gt;
-&lt;li&gt;流程图&lt;/li&gt;
-&lt;li&gt;用例图&lt;/li&gt;
-&lt;li&gt;状态图&lt;/li&gt;
-&lt;li&gt;组件图
-    
-    </summary>
-    
-      <category term="工具" scheme="https://fafe.me/categories/%E5%B7%A5%E5%85%B7/"/>
-    
-    
-      <category term="hexo" scheme="https://fafe.me/tags/hexo/"/>
-    
-      <category term="plantuml" scheme="https://fafe.me/tags/plantuml/"/>
     
   </entry>
   

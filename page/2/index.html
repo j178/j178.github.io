@@ -75,6 +75,64 @@ ga('send', 'pageview');
     <div class="outer">
       <section id="main">
   
+    <article id="post-php-xdebug" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/01/21/php-xdebug/" class="article-date">
+  <time datetime="2017-01-20T16:15:18.000Z" itemprop="datePublished">2017-01-21</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/编程/">编程</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/21/php-xdebug/">PHP 使用 xdebug 调试之路</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li>PHPStorm中调试利用的是xdebug的remote特性，使用的是 <code>DBGp</code>协议，PHPStorm是一个实现了<code>DBGp</code>协议的客户端</li>
+<li>在<code>php.ini</code>中启用<code>xdebug.remote_enable</code>, 配置<code>xdebug.remote_host</code>和<code>xdebug.remote_port</code>, port默认是9000.<br>通过<code>phpinfo()</code>函数的输出，可以在<code>Loaded Configuration File</code>中看到实际加载的<code>php.ini</code>文件是哪一个。</li>
+<li><code>sudo apt install php-xdebug</code>之后，会自动在<code>/etc/php/7.0/apache2/conf.d</code>中创建一个<code>xdebug</code>的配置文件，可以在这个文件中修改关于xdebug的配置，而不用去改通用的<code>php.ini</code>.</li>
+<li>client启动之后会监听 port，等待xdebug发送的请求。</li>
+<li>要使php解释器在运行的时候activate xdebug，有三种方式：<ol>
+<li>从命令行运行php脚本时，设置环境变量<code>export XDEBUG_CONFIG=&quot;idekey=session_name&quot;</code>, 同样也可以在<code>XDEBUG_CONFIG</code>环境变量中设置<code>remote_host</code>,<code>remote_port</code>等属性。</li>
+<li>从一个浏览器中启动debugger，需要传递一个<code>XDEBUG_SESSION_START=session_name</code>参数，这个参数可以是<code>GET</code>，<code>POST</code>或者<code>Cookie</code>。可以使用一些浏览器的插件自动传递这个参数。</li>
+</ol>
+</li>
+<li>只要<code>xdebug.remtoe_enable</code>开启了，PHPStorm打开了 Listening for PHP Debug，也就是服务器和客户端都准备好了，然后浏览器发送请求的时候包含一个<code>XDEBUG_SESSION_START</code>参数（？文档中写的是XDEBUG_SESSION_START,而实际上<code>bookmark</code>和插件中设置的cookie都是<code>XDEBUG_SESSION</code>），就可以愉快地调试了。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="https://fafe.me/2017/01/21/php-xdebug/" data-id="cj98niohq00284uqf151i751j" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PHP/">PHP</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/xdebug/">xdebug</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-python-pillow" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/01/21/python-pillow/" class="article-date">
@@ -122,7 +180,7 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://fafe.me/2017/01/21/python-pillow/" data-id="cj8k3v1m6002auiqf0ivz5of8" class="article-share-link">分享到</a>
+        <a data-url="https://fafe.me/2017/01/21/python-pillow/" data-id="cj98niohs002f4uqfzxp5wtgp" class="article-share-link">分享到</a>
       
 
       
@@ -200,7 +258,7 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://fafe.me/2017/01/20/cross-domain/" data-id="cj8k3v1m2001zuiqf0agm0bi1" class="article-share-link">分享到</a>
+        <a data-url="https://fafe.me/2017/01/20/cross-domain/" data-id="cj98nioho00234uqf99bm7t2v" class="article-share-link">分享到</a>
       
 
       
@@ -255,7 +313,7 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://fafe.me/2017/01/19/tensorflow/" data-id="cj8k3v1m0001wuiqfop1wh6n1" class="article-share-link">分享到</a>
+        <a data-url="https://fafe.me/2017/01/19/tensorflow/" data-id="cj98niohn00204uqfy88afjf1" class="article-share-link">分享到</a>
       
 
       
@@ -306,72 +364,13 @@ ga('send', 'pageview');
     </div>
     <footer class="article-footer">
       
-        <a data-url="https://fafe.me/2017/01/19/127.0.0.1/" data-id="cj8k3v1lz001suiqffibbfvgi" class="article-share-link">分享到</a>
+        <a data-url="https://fafe.me/2017/01/19/127.0.0.1/" data-id="cj98niohm001x4uqfwl2re3aa" class="article-share-link">分享到</a>
       
 
       
 
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/hostname/">hostname</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-apache-config" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/01/18/apache-config/" class="article-date">
-  <time datetime="2017-01-18T15:55:43.000Z" itemprop="datePublished">2017-01-18</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/后端/">后端</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/01/18/apache-config/">Apache 配置学习</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="基本"><a href="#基本" class="headerlink" title="基本"></a>基本</h2><ul>
-<li>配置文件<code>/etc/apach2/apache2.conf</code>以及<code>/etc/apache2/conf-enabled</code></li>
-<li><code>DirectoryIndex index.html index.php</code> 优先级从左到右降低</li>
-<li>包含外部配置文件 <code>Include xxx</code></li>
-</ul>
-<h2 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h2><p><code>apachectl</code>脚本，从<code>/etc/apache2/envavars</code>中读取并设置一些环境变量</p>
-<h2 id="Rewrite"><a href="#Rewrite" class="headerlink" title="Rewrite"></a>Rewrite</h2><p>基于正则表达式的规则，动态修改 incoming URl requests。</p>
-<h2 id="Virtual-Host"><a href="#Virtual-Host" class="headerlink" title="Virtual Host"></a>Virtual Host</h2><p>用同一个 Apache 服务器上搭建多个服务，根据用户请求中不同的 Host首部（或其他条件） 将请求转给不同的<code>VirtualHost</code>来处理。</p>
-<h3 id="Name-based-vs-IP-based-Virtual-Hosts"><a href="#Name-based-vs-IP-based-Virtual-Hosts" class="headerlink" title="Name-based vs IP-based Virtual Hosts"></a>Name-based vs IP-based Virtual Hosts</h3><p>基于IP的虚拟主机，要求服务器有多个IP，Apache根据用户请求的IP来转发到相应的主机中<br>基于名字的虚拟主机，要求客户端在HTTP首部中包含主机的名字，这样多个主机就可以共享同一个IP。<br>基于名字(hostname)的虚拟主机，通常只需要将多个域名解析到同一个IP即可。<br>比如说，login.a.com和logout.a.com只想相同的IP，也使用相同的端口（即后台的web服务器是同一个），但是后台的web服务器却可以根据请求中的Host首部不同，为他们提供不同的服务。</p>
-<h3 id="服务器如何选择合适的-name-based-virtual-host"><a href="#服务器如何选择合适的-name-based-virtual-host" class="headerlink" title="服务器如何选择合适的 name-based virtual host?"></a>服务器如何选择合适的 name-based virtual host?</h3><p>先进行 IP-based的选择，也就是先根据请求的IP选择出为此IP服务的Virtual Host，然后再从中找出最符合的name-based virtual host。</p>
-<p>先根据IP和端口选出一组最符合的hosts，然后根据<code>ServerName</code>和<code>ServerAlias</code>作比较。如果没有符合的ServerName和ServerAlias，则选择列出的第一个。</p>
-<p>省略ServerName则默认使用fully qualified domain name。</p>
-<h1 id="参考链接"><a href="#参考链接" class="headerlink" title="参考链接"></a>参考链接</h1><p><a href="https://httpd.apache.org/docs/2.4/vhosts/name-based.html" target="_blank" rel="external"></a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="https://fafe.me/2017/01/18/apache-config/" data-id="cj8k3v1lw001nuiqf6edmzv1f" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Apache/">Apache</a></li></ul>
 
     </footer>
   </div>
@@ -402,7 +401,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/PHP/" style="font-size: 16.67px;">PHP</a> <a href="/tags/Pillow/" style="font-size: 10px;">Pillow</a> <a href="/tags/Python/" style="font-size: 20px;">Python</a> <a href="/tags/TensorFlow/" style="font-size: 10px;">TensorFlow</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/app/" style="font-size: 10px;">app</a> <a href="/tags/arrow/" style="font-size: 10px;">arrow</a> <a href="/tags/form-data/" style="font-size: 10px;">form-data</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hostname/" style="font-size: 10px;">hostname</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/logging/" style="font-size: 10px;">logging</a> <a href="/tags/multipart/" style="font-size: 10px;">multipart</a> <a href="/tags/plantuml/" style="font-size: 10px;">plantuml</a> <a href="/tags/requests/" style="font-size: 13.33px;">requests</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/super/" style="font-size: 10px;">super</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/协程/" style="font-size: 10px;">协程</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/同源策略/" style="font-size: 10px;">同源策略</a> <a href="/tags/时间/" style="font-size: 10px;">时间</a> <a href="/tags/时间处理/" style="font-size: 10px;">时间处理</a> <a href="/tags/设计模式/" style="font-size: 13.33px;">设计模式</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a>
+      <a href="/tags/Apache/" style="font-size: 10px;">Apache</a> <a href="/tags/Composer/" style="font-size: 10px;">Composer</a> <a href="/tags/Hack/" style="font-size: 10px;">Hack</a> <a href="/tags/Linux/" style="font-size: 10px;">Linux</a> <a href="/tags/PHP/" style="font-size: 16.67px;">PHP</a> <a href="/tags/Pillow/" style="font-size: 10px;">Pillow</a> <a href="/tags/Python/" style="font-size: 20px;">Python</a> <a href="/tags/TensorFlow/" style="font-size: 10px;">TensorFlow</a> <a href="/tags/Thread/" style="font-size: 10px;">Thread</a> <a href="/tags/app/" style="font-size: 10px;">app</a> <a href="/tags/arrow/" style="font-size: 10px;">arrow</a> <a href="/tags/form-data/" style="font-size: 10px;">form-data</a> <a href="/tags/hexo/" style="font-size: 10px;">hexo</a> <a href="/tags/hostname/" style="font-size: 10px;">hostname</a> <a href="/tags/java/" style="font-size: 13.33px;">java</a> <a href="/tags/leetcode/" style="font-size: 10px;">leetcode</a> <a href="/tags/linux/" style="font-size: 10px;">linux</a> <a href="/tags/logging/" style="font-size: 10px;">logging</a> <a href="/tags/multipart/" style="font-size: 10px;">multipart</a> <a href="/tags/plantuml/" style="font-size: 10px;">plantuml</a> <a href="/tags/requests/" style="font-size: 13.33px;">requests</a> <a href="/tags/shell/" style="font-size: 10px;">shell</a> <a href="/tags/super/" style="font-size: 10px;">super</a> <a href="/tags/xdebug/" style="font-size: 10px;">xdebug</a> <a href="/tags/协程/" style="font-size: 10px;">协程</a> <a href="/tags/原型模式/" style="font-size: 10px;">原型模式</a> <a href="/tags/同源策略/" style="font-size: 10px;">同源策略</a> <a href="/tags/时间/" style="font-size: 10px;">时间</a> <a href="/tags/时间处理/" style="font-size: 10px;">时间处理</a> <a href="/tags/设计模式/" style="font-size: 13.33px;">设计模式</a> <a href="/tags/跨域/" style="font-size: 10px;">跨域</a> <a href="/tags/适配器模式/" style="font-size: 10px;">适配器模式</a>
     </div>
   </div>
 
@@ -411,7 +410,7 @@ ga('send', 'pageview');
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">十月 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/01/">一月 2017</a><span class="archive-list-count">9</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">十二月 2016</a><span class="archive-list-count">5</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">十月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">九月 2016</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">七月 2016</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
